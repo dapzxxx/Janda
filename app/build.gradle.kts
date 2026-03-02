@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.myapp.webapp"
+    namespace = "com.dapz.injetor"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.myapp.webapp"
+        applicationId = "com.dapz.injetor"
         minSdk = 23
         targetSdk = 34
         versionCode = 1
