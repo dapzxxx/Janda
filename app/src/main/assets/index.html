@@ -13,6 +13,8 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
 <title>Dapz AI — Analisa Trading Forex</title>
+<!-- Android WebView file access permissions -->
+<meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; img-src * data: blob:; media-src * data: blob:;">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -328,15 +330,19 @@ body::after{
   position:relative;min-height:82px;
   display:flex;align-items:center;padding:16px;
 }
-.slot-zone label{
-  position:absolute;inset:0;
-  display:flex;align-items:center;padding:16px;
-  cursor:pointer;touch-action:manipulation;z-index:2;
+/* Hidden real file input — triggered by JS click() */
+.slot-finput{
+  position:absolute;left:-9999px;top:-9999px;
+  width:1px;height:1px;opacity:0;
+  font-size:16px;
 }
-.slot-zone input[type=file]{
+/* Tappable overlay button — works in ALL WebView APK builders */
+.slot-btn{
   position:absolute;inset:0;width:100%;height:100%;
-  opacity:0;cursor:pointer;z-index:3;
-  font-size:16px;/* prevent iOS zoom */
+  background:transparent;border:none;cursor:pointer;
+  touch-action:manipulation;z-index:5;
+  -webkit-appearance:none;appearance:none;
+  outline:none;
 }
 .slot-empty{display:flex;align-items:center;gap:14px;pointer-events:none;-webkit-user-select:none;user-select:none;width:100%}
 .slot-icn{
@@ -360,7 +366,7 @@ body::after{
   transition:color .15s;
 }
 .slot-redo:active{color:var(--cyan)}
-.slot-redo input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px;z-index:4}
+.slot-redo-finput{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;font-size:16px;}
 .slot.done .slot-redo{display:block}
 
 /* ── ANALYZE BUTTON ── */
@@ -736,18 +742,19 @@ footer{
         </div>
         <div class="slot-badge" id="sb0">BELUM</div>
       </div>
+      <input type="file" id="fi0" class="slot-finput" accept="image/*" onchange="onUp(0,event)">
       <div class="slot-zone">
-        <label for="fi0"><input type="file" id="fi0" accept="image/*" onchange="onUp(0,event)"></label>
+        <button type="button" class="slot-btn" onclick="triggerUpload(0)"></button>
         <div class="slot-empty">
           <div class="slot-icn">📊</div>
           <div>
             <div class="slot-t1">Ketuk untuk Upload / Foto</div>
-            <div class="slot-t2">Chart M5 · Galeri atau buka kamera langsung</div>
+            <div class="slot-t2">Chart M5 · Pilih dari Galeri Foto</div>
           </div>
         </div>
         <img class="slot-img" id="si0" alt="M5">
       </div>
-      <div class="slot-redo"><input type="file" accept="image/*" onchange="onUp(0,event)">🔄 Ganti Gambar M5</div>
+      <div class="slot-redo" onclick="triggerUpload(0)">🔄 Ganti Gambar M5</div>
     </div>
 
     <div class="slot s1" id="s1">
@@ -758,18 +765,19 @@ footer{
         </div>
         <div class="slot-badge" id="sb1">BELUM</div>
       </div>
+      <input type="file" id="fi1" class="slot-finput" accept="image/*" onchange="onUp(1,event)">
       <div class="slot-zone">
-        <label for="fi1"><input type="file" id="fi1" accept="image/*" onchange="onUp(1,event)"></label>
+        <button type="button" class="slot-btn" onclick="triggerUpload(1)"></button>
         <div class="slot-empty">
           <div class="slot-icn">📊</div>
           <div>
             <div class="slot-t1">Ketuk untuk Upload / Foto</div>
-            <div class="slot-t2">Chart M15 · Galeri atau buka kamera langsung</div>
+            <div class="slot-t2">Chart M15 · Pilih dari Galeri Foto</div>
           </div>
         </div>
         <img class="slot-img" id="si1" alt="M15">
       </div>
-      <div class="slot-redo"><input type="file" accept="image/*" onchange="onUp(1,event)">🔄 Ganti Gambar M15</div>
+      <div class="slot-redo" onclick="triggerUpload(1)">🔄 Ganti Gambar M15</div>
     </div>
 
     <div class="slot s2" id="s2">
@@ -780,18 +788,19 @@ footer{
         </div>
         <div class="slot-badge" id="sb2">BELUM</div>
       </div>
+      <input type="file" id="fi2" class="slot-finput" accept="image/*" onchange="onUp(2,event)">
       <div class="slot-zone">
-        <label for="fi2"><input type="file" id="fi2" accept="image/*" onchange="onUp(2,event)"></label>
+        <button type="button" class="slot-btn" onclick="triggerUpload(2)"></button>
         <div class="slot-empty">
           <div class="slot-icn">📊</div>
           <div>
             <div class="slot-t1">Ketuk untuk Upload / Foto</div>
-            <div class="slot-t2">Chart H1 · Galeri atau buka kamera langsung</div>
+            <div class="slot-t2">Chart H1 · Pilih dari Galeri Foto</div>
           </div>
         </div>
         <img class="slot-img" id="si2" alt="H1">
       </div>
-      <div class="slot-redo"><input type="file" accept="image/*" onchange="onUp(2,event)">🔄 Ganti Gambar H1</div>
+      <div class="slot-redo" onclick="triggerUpload(2)">🔄 Ganti Gambar H1</div>
     </div>
 
   </div>
@@ -932,30 +941,46 @@ window.setPair=function(p){
   g('pb').classList.toggle('on',p==='BTC');
 };
 
-/* ─── UPLOAD — full APK-compatible file read ─── */
+/* ─── UPLOAD — APK WebView compatible ─── */
+/* triggerUpload: programmatic click works in ALL APK builders (GitHub, Median, etc) */
+window.triggerUpload=function(i){
+  try{
+    var inp=g('fi'+i);
+    if(!inp)return;
+    /* Reset value first so same file can be re-picked */
+    try{inp.value='';}catch(e){}
+    inp.click();
+  }catch(er){showT('Tidak bisa buka galeri, coba lagi');}
+};
+
 window.onUp=function(i,evt){
   try{
-    var files=evt&&evt.target&&evt.target.files;
-    if(!files||!files[0])return;
+    var inp=evt&&evt.target?evt.target:g('fi'+i);
+    var files=inp&&inp.files;
+    if(!files||!files.length||!files[0])return;
     var f=files[0];
+    /* Size check */
     if(f.size>25*1024*1024){showT('File terlalu besar, max 25MB');return;}
+    /* Read as base64 */
     var rd=new FileReader();
     rd.onload=function(ev){
       try{
-        var res=ev.target.result;
-        if(!res)return;
+        var res=ev&&ev.target&&ev.target.result;
+        if(!res||res.length<100)return;
         imgs[i]=res;
-        g('si'+i).src=res;
+        var img=g('si'+i);
+        if(img)img.src=res;
         g('s'+i).classList.add('done');
         tx('sb'+i,'✓ SIAP');
         updateHint();
-        showT('Chart '+TFS[i]+' berhasil diupload!');
-      }catch(er){showT('Gagal proses gambar, coba lagi');}
+        showT('Chart '+TFS[i]+' berhasil diupload! 📊');
+      }catch(er){showT('Gagal proses gambar');}
     };
-    rd.onerror=function(){showT('Gagal baca file');};
+    rd.onerror=function(){showT('Gagal baca file, coba lagi');};
     rd.readAsDataURL(f);
-    evt.target.value='';/* allow same-file reselect */
-  }catch(er){showT('Upload error, coba lagi');}
+    /* Reset for re-pick */
+    setTimeout(function(){try{inp.value='';}catch(e){}},500);
+  }catch(er){showT('Upload error: '+String(er).slice(0,40));}
 };
 
 function updateHint(){
@@ -1208,6 +1233,23 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js').catch(function(){});
   });
 }
+
+/* ─── ANDROID WEBVIEW BRIDGE ─── */
+/* Some APK builders inject Android interface — detect and handle */
+window.addEventListener('DOMContentLoaded',function(){
+  /* Ensure all file inputs have correct attributes for WebView */
+  var inputs=document.querySelectorAll('input[type=file]');
+  for(var i=0;i<inputs.length;i++){
+    inputs[i].setAttribute('accept','image/*');
+    /* No capture attribute — user can choose from gallery or camera */
+  }
+});
+
+/* ─── FALLBACK BUTTON (shown if file input fails) ─── */
+/* Some very old WebView versions need this */
+window._uploadFailed=function(i){
+  showT('Coba ketuk tombol di tengah area upload');
+};
 
 })();
 </script>
