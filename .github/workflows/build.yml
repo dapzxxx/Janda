@@ -27,6 +27,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: Dapz-Ai-debug
+          name: Dapz-Ai-Analisa-debug
           path: app/build/outputs/apk/debug/*.apk
           retention-days: 7
