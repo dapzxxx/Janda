@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = Color.parseColor("#6d28d9")
+            window.statusBarColor = Color.parseColor("#0000ff")
         }
         wv = WebView(this)
         wv.layoutParams = FrameLayout.LayoutParams(-1, -1)
