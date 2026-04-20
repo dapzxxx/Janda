@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "DAPZ XIT"
+rootProject.name = "My WebApp"
 include(":app")
