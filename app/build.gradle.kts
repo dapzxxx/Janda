@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.kipas.abgin"
+    namespace = "com.himz.sensi"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.kipas.abgin"
-        minSdk = 23
+        applicationId = "com.himz.sensi"
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"

@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Percobaan"
+rootProject.name = "Himz Generator Sensi"
 include(":app")
