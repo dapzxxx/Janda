@@ -159,21 +159,20 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
 .bubble.ai p:last-child{margin-bottom:0}
 
 .bubble.ai ul,.bubble.ai ol{
-  margin:6px 0 10px;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+  margin:6px 0 10px;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px}
 .bubble.ai ul li,.bubble.ai ol li{
-  display:flex;gap:8px;align-items:flex-start;line-height:1.65;font-size:13.5px}
+  display:flex;gap:10px;align-items:flex-start;line-height:1.7;font-size:14px;word-break:break-word}
+.bubble.ai ul li>*:last-child,.bubble.ai ol li>*:last-child{flex:1;min-width:0}
 .bubble.ai ul li::before{
   content:'';width:6px;height:6px;border-radius:50%;
   background:linear-gradient(135deg,var(--c1),var(--c3));
-  flex-shrink:0;margin-top:6px}
+  flex-shrink:0;margin-top:8px}
 .bubble.ai ol{counter-reset:oli}
 .bubble.ai ol li{counter-increment:oli}
 .bubble.ai ol li::before{
-  content:counter(oli);
-  min-width:20px;height:20px;border-radius:50%;
-  background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.3);
-  color:var(--c2);font-size:11px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  content:'◆';
+  color:var(--c2);font-size:10px;font-weight:700;
+  flex-shrink:0;margin-top:4px}
 
 .bubble.ai hr{
   border:none;height:1px;
@@ -619,14 +618,16 @@ function fmt(t){
     if(/^[*\-] /.test(l)){
       if(inOl){out.push('</ol>');inOl=false}
       if(!inUl){out.push('<ul>');inUl=true}
-      out.push(`<li>${inl(l.slice(2))}</li>`);continue}
+      out.push(`<li><span>${inl(l.slice(2))}</span></li>`);continue}
 
-    // ordered list
-    const olm=l.match(/^\d+\. (.*)/);
+    // ordered list — pakai counter CSS, ignore angka dari AI
+    // handle juga format **1. teks** atau **1) teks**
+    const rawL=l.replace(/^\*\*(\d+[\.\)])\s*/,'$1 ').replace(/\*\*$/,'');
+    const olm=rawL.match(/^\d+[\.\)]\s+(.*)/);
     if(olm){
       if(inUl){out.push('</ul>');inUl=false}
       if(!inOl){out.push('<ol>');inOl=true}
-      out.push(`<li>${inl(olm[1])}</li>`);continue}
+      out.push(`<li><span>${inl(olm[1])}</span></li>`);continue}
 
     // blank line = paragraph break
     if(l.trim()===''){
