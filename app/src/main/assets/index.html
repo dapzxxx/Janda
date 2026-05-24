@@ -140,6 +140,15 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
 .img-only-wrap:active{transform:scale(0.97)}
 .img-only{display:block;width:220px;max-height:280px;object-fit:cover;border-radius:16px}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* generated image */
+.gen-img-wrap{display:flex;flex-direction:column;gap:0;border-radius:16px;overflow:hidden;
+  box-shadow:0 6px 30px rgba(0,0,0,0.5);max-width:260px;cursor:pointer;
+  border:1px solid var(--border2);transition:transform 0.15s}
+.gen-img-wrap:active{transform:scale(0.97)}
+.gen-img{width:260px;height:260px;object-fit:cover;display:block}
+.gen-img-cap{display:flex;align-items:center;gap:6px;padding:8px 10px;
+  background:var(--s2);font-size:11px;color:var(--muted2);line-height:1.4}
 .bubble code{font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;font-size:12.5px;color:#93c5fd}
 .bubble pre{background:rgba(0,0,0,0.4);border:1px solid var(--border2);border-radius:9px;padding:12px;margin:8px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:#e2e8f0}
 .bubble pre code{background:none;padding:0;color:inherit}
@@ -490,7 +499,18 @@ const SYS=`Kamu adalah Dapz AI, asisten AI yang sangat cerdas, ramah, dan helpfu
 Jawab dalam bahasa Indonesia kecuali pengguna menggunakan bahasa lain.
 Berikan jawaban yang informatif, akurat, dan engaging.
 Jangan gunakan emoji HP/Android biasa. Gunakan bahasa yang natural dan friendly.
-Jika ada gambar, analisis dengan sangat detail.`;
+Jika ada gambar yang dikirim user, analisis dengan sangat detail.
+
+PENTING - Generate Gambar:
+Jika user meminta membuat/generate/buat gambar, ilustrasi, foto, atau gambar apapun, kamu HARUS balas HANYA dengan format berikut (tidak ada teks lain):
+[GENERATE_IMAGE: deskripsi prompt dalam bahasa Inggris yang detail dan deskriptif]
+
+Contoh:
+User: "buatkan gambar kucing astronot"
+Kamu: [GENERATE_IMAGE: a cute cat wearing an astronaut suit floating in space, stars and earth in background, highly detailed, digital art, 4k]
+
+User: "gambar pemandangan gunung saat sunset"
+Kamu: [GENERATE_IMAGE: beautiful mountain landscape at sunset, orange and purple sky, realistic photography, highly detailed, 4k]`;
 
 let history=[],imgB64=null,imgSrc=null,imgName=null,menuOpen=false;
 
@@ -768,10 +788,66 @@ async function send(){
     else{
       const reply=data.choices[0].message.content;
       history.push({role:'assistant',content:reply});
-      addMsg('ai',reply);
+      // cek apakah AI minta generate gambar
+      const imgMatch=reply.match(/\[GENERATE_IMAGE:\s*(.*?)\]/s);
+      if(imgMatch){
+        const prompt=imgMatch[1].trim();
+        generateImage(prompt);
+      } else {
+        addMsg('ai',reply);
+      }
     }
   }catch(err){removeTyping();addMsg('ai','Gagal terhubung ke server. Periksa koneksi internet kamu.')}
   btn.disabled=false;el.focus();
+}
+
+/* GENERATE IMAGE via Pollinations AI */
+async function generateImage(prompt){
+  // tampilkan pesan loading dulu
+  addMsg('ai','Sedang membuat gambar, tunggu sebentar...');
+  const encodedPrompt=encodeURIComponent(prompt);
+  const seed=Math.floor(Math.random()*99999);
+  const url=`https://image.pollinations.ai/prompt/${encodedPrompt}?width=768&height=768&seed=${seed}&nologo=true&enhance=true`;
+
+  // preload gambar dulu baru tampilkan
+  const img=new Image();
+  img.onload=()=>{
+    // hapus pesan loading
+    const msgs=document.getElementById('messages');
+    const rows=msgs.querySelectorAll('.msg-row.ai');
+    const last=rows[rows.length-1];
+    if(last)last.remove();
+    // tampilkan gambar hasil generate
+    addGeneratedImage(url,prompt);
+  };
+  img.onerror=()=>{
+    const msgs=document.getElementById('messages');
+    const rows=msgs.querySelectorAll('.msg-row.ai');
+    const last=rows[rows.length-1];
+    if(last)last.remove();
+    addMsg('ai','Gagal membuat gambar. Coba lagi dengan deskripsi yang berbeda.');
+  };
+  img.src=url;
+}
+
+function addGeneratedImage(url,prompt){
+  const w=document.getElementById('welcome');if(w)w.remove();
+  const msgs=document.getElementById('messages');
+  const row=document.createElement('div');row.className='msg-row ai';
+  const av=document.createElement('div');av.className='av av-ai';
+  const i=document.createElement('img');i.src=LOGO_SRC;i.alt='D';i.onerror=()=>{av.textContent='D'};av.appendChild(i);
+  const bw=document.createElement('div');bw.className='bwrap';
+
+  // container gambar
+  const wrap=document.createElement('div');wrap.className='gen-img-wrap';
+  const im=document.createElement('img');im.src=url;im.className='gen-img';im.onclick=()=>openImgViewer(url);
+  const cap=document.createElement('div');cap.className='gen-img-cap';
+  cap.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>${prompt.length>60?prompt.slice(0,60)+'...':prompt}</span>`;
+  wrap.appendChild(im);wrap.appendChild(cap);
+
+  const bt=document.createElement('div');bt.className='btime';bt.textContent=now();
+  bw.appendChild(wrap);bw.appendChild(bt);
+  row.appendChild(av);row.appendChild(bw);msgs.appendChild(row);scrollBot();
 }
 
 /* CLEAR */
