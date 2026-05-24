@@ -129,7 +129,17 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
   color:var(--text);box-shadow:0 2px 18px rgba(0,0,0,0.3),0 0 0 1px rgba(99,102,241,0.04)}
 .bubble.user{background:linear-gradient(135deg,#5557f0,#7c7ff8);border-top-right-radius:4px;
   color:#fff;box-shadow:0 4px 22px rgba(99,102,241,0.38),inset 0 1px 0 rgba(255,255,255,0.15)}
-.bubble img.att{max-width:100%;max-height:220px;border-radius:9px;margin-top:8px;display:block;object-fit:cover;border:1px solid var(--border2)}
+/* bubble user yg isinya gambar+teks — hilangkan bg ungu, cukup tampilkan gambar */
+.bubble.user.img-bubble{background:transparent;border:none;box-shadow:none;padding:0}
+.bubble img.att{max-width:100%;max-height:220px;border-radius:9px;margin-top:8px;display:block;object-fit:cover;border:1px solid var(--border2);cursor:pointer;transition:opacity 0.15s}
+.bubble img.att:active{opacity:0.8}
+/* gambar tanpa teks — tanpa bubble */
+.img-only-wrap{display:inline-block;border-radius:16px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,0.5);cursor:pointer;
+  transition:transform 0.15s,box-shadow 0.15s;margin-bottom:4px}
+.img-only-wrap:active{transform:scale(0.97)}
+.img-only{display:block;width:220px;max-height:280px;object-fit:cover;border-radius:16px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .bubble code{font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;font-size:12.5px;color:#93c5fd}
 .bubble pre{background:rgba(0,0,0,0.4);border:1px solid var(--border2);border-radius:9px;padding:12px;margin:8px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:#e2e8f0}
 .bubble pre code{background:none;padding:0;color:inherit}
@@ -355,7 +365,7 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
   <div class="header-right">
     <div class="model-pill">
       <div class="model-dot"></div>
-      <span class="model-label">Llama 3.3 70B</span>
+      <span class="model-label">Llama 4 Scout</span>
     </div>
     <div class="free-badge">
       <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
@@ -433,16 +443,6 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
     <div class="up-item-icon ic-cyan"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
     <div class="up-item-text"><div class="up-title">Foto / Gambar</div><div class="up-desc">JPG, PNG, GIF, WebP</div></div>
   </div>
-  <div class="up-divider"></div>
-  <div class="up-item" onclick="triggerUpload('.pdf,.doc,.docx,.txt','Dokumen')">
-    <div class="up-item-icon ic-indigo"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-    <div class="up-item-text"><div class="up-title">Dokumen</div><div class="up-desc">PDF, DOC, TXT</div></div>
-  </div>
-  <div class="up-divider"></div>
-  <div class="up-item" onclick="triggerUpload('video/*','Video')">
-    <div class="up-item-icon ic-pink"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
-    <div class="up-item-text"><div class="up-title">Video</div><div class="up-desc">MP4, MOV (pratinjau saja)</div></div>
-  </div>
 </div>
 
 </div><!-- .app -->
@@ -451,7 +451,7 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
 <script>
 let API_KEY='';
 const API_URL='https://api.groq.com/openai/v1/chat/completions';
-const MODEL='llama-3.3-70b-versatile';
+const MODEL='meta-llama/llama-4-scout-17b-16e-instruct';
 let LOGO_SRC='https://files.catbox.moe/cw5rpz.jpg';
 
 /* ── API KEY SETUP ── */
@@ -673,12 +673,42 @@ function addMsg(role,text,src){
   if(role==='ai'){const i=document.createElement('img');i.src=LOGO_SRC;i.alt='D';i.onerror=()=>{av.textContent='D'};av.appendChild(i)}
   else{const i=document.createElement('img');i.src='https://files.catbox.moe/2688aq.jpg';i.alt='U';i.style.cssText='width:100%;height:100%;object-fit:cover';i.onerror=()=>{av.textContent='U'};av.appendChild(i)}
   const bw=document.createElement('div');bw.className='bwrap';
-  const bub=document.createElement('div');bub.className=`bubble ${role}`;
-  if(src){const i=document.createElement('img');i.src=src;i.className='att';bub.appendChild(i)}
-  if(text){const s=document.createElement('span');s.innerHTML=fmt(text);bub.appendChild(s)}
+
+  // Jika ada gambar — tampilkan gambar TERPISAH di atas, tanpa bubble
+  if(src){
+    const imgWrap=document.createElement('div');imgWrap.className='img-only-wrap';
+    const im=document.createElement('img');im.src=src;im.className='img-only';
+    im.onclick=()=>openImgViewer(src);
+    imgWrap.appendChild(im);
+    bw.appendChild(imgWrap);
+  }
+
+  // Jika ada teks — tampilkan bubble teks di bawah gambar
+  if(text){
+    const bub=document.createElement('div');bub.className=`bubble ${role}`;
+    const s=document.createElement('span');s.innerHTML=fmt(text);
+    bub.appendChild(s);
+    bw.appendChild(bub);
+  }
+
   const bt=document.createElement('div');bt.className='btime';bt.textContent=now();
-  bw.appendChild(bub);bw.appendChild(bt);
+  bw.appendChild(bt);
   row.appendChild(av);row.appendChild(bw);msgs.appendChild(row);scrollBot();
+}
+
+/* IMAGE VIEWER */
+function openImgViewer(src){
+  const ov=document.createElement('div');ov.id='img-viewer';
+  ov.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.18s ease';
+  const im=document.createElement('img');
+  im.src=src;im.style.cssText='max-width:100%;max-height:100%;border-radius:10px;object-fit:contain;box-shadow:0 8px 60px rgba(0,0,0,0.8)';
+  const closeBtn=document.createElement('button');
+  closeBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  closeBtn.style.cssText='position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center';
+  closeBtn.querySelector('svg').style.cssText='width:18px;height:18px';
+  const close=()=>ov.remove();
+  closeBtn.onclick=close;ov.onclick=(e)=>{if(e.target===ov)close()};
+  ov.appendChild(im);ov.appendChild(closeBtn);document.body.appendChild(ov);
 }
 function showTyping(){
   const msgs=document.getElementById('messages');
@@ -698,21 +728,47 @@ async function send(){
   const txt=el.value.trim();
   if(!txt&&!imgSrc)return;
   const btn=document.getElementById('send-btn');btn.disabled=true;
-  addMsg('user',txt,imgSrc);
-  const b64=imgB64,src=imgSrc;
+
+  // simpan b64 & src sebelum removeImg() mengosongkannya
+  const b64=imgB64, imgPreview=imgSrc;
+  addMsg('user',txt,imgPreview);
   el.value='';el.style.height='auto';removeImg();
-  let content;
-  if(b64){content=[{type:'text',text:txt||'Tolong analisis gambar ini.'},{type:'image_url',image_url:{url:`data:image/jpeg;base64,${b64}`}}]}
-  else content=txt;
-  history.push({role:'user',content});
+
+  // pesan yang dikirim ke API untuk giliran ini
+  let msgNow;
+  if(b64){
+    msgNow={role:'user',content:[
+      {type:'text',text:txt||'Tolong analisis gambar ini.'},
+      {type:'image_url',image_url:{url:`data:image/jpeg;base64,${b64}`}}
+    ]};
+  } else {
+    msgNow={role:'user',content:txt};
+  }
+
+  // history hanya menyimpan string — TIDAK pernah menyimpan array/gambar
+  // supaya pesan berikutnya tidak error
+  history.push({role:'user',content:txt||(b64?'[gambar]':'')});
+
   showTyping();
+
+  // kirim ke API: history lama (semua string) + pesan sekarang (boleh ada gambar)
+  const msgsToSend=[
+    {role:'system',content:SYS},
+    ...history.slice(0,-1),   // history sebelum pesan ini (semua string)
+    msgNow                     // pesan ini, boleh array jika ada gambar
+  ];
+
   try{
     const res=await fetch(API_URL,{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${API_KEY}`},
-      body:JSON.stringify({model:MODEL,messages:[{role:'system',content:SYS},...history],max_tokens:1024,temperature:0.72})});
+      body:JSON.stringify({model:MODEL,messages:msgsToSend,max_tokens:1024,temperature:0.72})});
     const data=await res.json();removeTyping();
     if(data.error){addMsg('ai',`Terjadi kesalahan: ${data.error.message}`)}
-    else{const reply=data.choices[0].message.content;history.push({role:'assistant',content:reply});addMsg('ai',reply)}
+    else{
+      const reply=data.choices[0].message.content;
+      history.push({role:'assistant',content:reply});
+      addMsg('ai',reply);
+    }
   }catch(err){removeTyping();addMsg('ai','Gagal terhubung ke server. Periksa koneksi internet kamu.')}
   btn.disabled=false;el.focus();
 }

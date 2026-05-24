@@ -18,12 +18,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var wv: WebView
     private var fileCallback: ValueCallback<Array<Uri>>? = null
     private val FILE_CHOOSER_REQUEST = 1001
+    
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = Color.parseColor("#0000ff")
+            window.statusBarColor = Color.parseColor("#000000")
         }
         wv = WebView(this)
         wv.layoutParams = FrameLayout.LayoutParams(-1, -1)
@@ -47,9 +48,9 @@ class MainActivity : AppCompatActivity() {
                 fileCallback = filePathCallback
                 val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "image/*"
+                    type = "*/*"
                 }
-                val chooser = Intent.createChooser(intent, "Pilih Foto")
+                val chooser = Intent.createChooser(intent, "Pilih File")
                 startActivityForResult(chooser, FILE_CHOOSER_REQUEST)
                 return true
             }
