@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.himz.sensi"
+    namespace = "com.dapz.ai"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.himz.sensi"
-        minSdk = 21
+        applicationId = "com.dapz.ai"
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"

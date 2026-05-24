@@ -1,491 +1,749 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Himz Generate Sensi | Auto Sensi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --neon-blue: #00f3ff;
-            --neon-purple: #bc13fe;
-            --neon-red: #ff003c;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<title>Dapz AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#03050e;--s1:#070b18;--s2:#0b1020;--s3:#0f1528;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --c1:#6366f1;--c2:#a78bfa;--c3:#22d3ee;--c4:#f472b6;
+  --text:#eef0f8;--muted:#3a4258;--muted2:#647090;
+  --hdr:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;height:100dvh;overflow:hidden}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);
+  height:100%;height:100dvh;overflow:hidden;position:fixed;width:100%;
+  -webkit-text-size-adjust:100%}
 
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-            margin: 0;
-            min-height: 100vh;
-        }
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:0.45}
 
-        h1, h2, h3, .font-orbitron {
-            font-family: 'Orbitron', sans-serif;
-        }
+/* APP SHELL */
+.app{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;height:100dvh;overflow:hidden}
 
-        /* Animated Background */
-        .bg-animate {
-            background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #050505 100%);
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2;
-        }
+/* HEADER */
+header{flex-shrink:0;height:var(--hdr);display:flex;align-items:center;gap:12px;
+  padding:0 16px;background:rgba(7,11,24,0.9);
+  backdrop-filter:blur(32px) saturate(180%);-webkit-backdrop-filter:blur(32px) saturate(180%);
+  border-bottom:1px solid var(--border);position:relative;z-index:100}
+header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--c1) 30%,var(--c3) 70%,transparent);opacity:0.4}
 
-        /* Floating Particles Canvas */
-        #canvas-particles {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
+.logo-group{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo-btn{width:42px;height:42px;border-radius:13px;flex-shrink:0;overflow:hidden;
+  border:2px solid transparent;
+  background:linear-gradient(var(--s1),var(--s1)) padding-box,linear-gradient(135deg,var(--c1),var(--c3)) border-box;
+  box-shadow:0 0 0 3px rgba(99,102,241,0.08),0 4px 16px rgba(0,0,0,0.5);transition:box-shadow 0.3s}
+.logo-btn img{width:100%;height:100%;object-fit:cover;display:block}
+.header-meta{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.header-name{font-size:17px;font-weight:800;letter-spacing:-0.3px;
+  background:linear-gradient(90deg,#fff 20%,var(--c2) 60%,var(--c3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-sub{font-size:11px;color:var(--muted2);margin-top:2px;display:flex;align-items:center;gap:5px}
+.dot-live{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22d3ee;flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(34,211,238,0.2);animation:livePulse 2.2s ease-in-out infinite}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 3px rgba(34,211,238,0.2)}50%{box-shadow:0 0 0 7px rgba(34,211,238,0.03)}}
+.header-spacer{flex:1;min-width:0}
+.header-right{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.model-pill{display:flex;align-items:center;gap:6px;background:rgba(99,102,241,0.1);
+  border:1px solid rgba(99,102,241,0.22);border-radius:20px;padding:4px 10px 4px 7px}
+.model-dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c3));box-shadow:0 0 7px rgba(99,102,241,0.6)}
+.model-label{font-size:11px;font-weight:600;color:var(--c2);letter-spacing:0.2px}
+.free-badge{display:flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,rgba(34,211,238,0.07),rgba(99,102,241,0.07));
+  border:1px solid rgba(34,211,238,0.22);border-radius:20px;padding:4px 10px;
+  font-size:10.5px;font-weight:700;color:var(--c3);letter-spacing:0.5px;text-transform:uppercase;
+  box-shadow:0 0 10px rgba(34,211,238,0.1)}
+.free-badge svg{width:11px;height:11px;fill:none;stroke:var(--c3);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.btn-clear{width:34px;height:34px;border-radius:10px;border:1px solid var(--border2);
+  background:rgba(255,255,255,0.04);color:var(--muted2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
+.btn-clear:hover{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#f87171}
+.btn-clear:active{transform:scale(0.92)}
+.btn-clear svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-        /* Glassmorphism - Dipergelap agar lebih elegan */
-        .glass-card {
-            background: rgba(15, 15, 20, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.8);
-        }
+/* MESSAGES — the only scrolling area */
+#messages{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  padding:20px 16px 16px;display:flex;flex-direction:column;gap:20px;scroll-behavior:smooth}
+#messages::-webkit-scrollbar{width:3px}
+#messages::-webkit-scrollbar-track{background:transparent}
+#messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:3px}
 
-        /* RGB Border Animation */
-        .rgb-border-wrapper {
-            position: relative;
-            border-radius: 22px;
-            padding: 2px;
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple), var(--neon-blue));
-            background-size: 300% 300%;
-            animation: rgb-anim 4s linear infinite;
-        }
+/* WELCOME */
+#welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:18px;text-align:center;padding:20px 8px;animation:wIn 0.65s cubic-bezier(0.34,1.2,0.64,1)}
+@keyframes wIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.wlogo-wrap{position:relative;width:88px;height:88px;margin-bottom:4px}
+.wlogo-wrap img{width:88px;height:88px;border-radius:26px;object-fit:cover;
+  border:2px solid transparent;
+  background:linear-gradient(var(--s1),var(--s1)) padding-box,linear-gradient(135deg,var(--c1),var(--c3)) border-box;
+  box-shadow:0 0 50px rgba(99,102,241,0.3),0 0 100px rgba(34,211,238,0.1)}
+.wlogo-wrap::before{content:'';position:absolute;inset:-10px;border-radius:36px;
+  background:conic-gradient(from 0deg,var(--c1),var(--c3),var(--c4),var(--c1));
+  opacity:0.16;filter:blur(13px);animation:spin 5s linear infinite;z-index:-1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.w-title{font-size:28px;font-weight:900;letter-spacing:-0.6px;
+  background:linear-gradient(135deg,#fff 0%,var(--c2) 50%,var(--c3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.w-sub{font-size:13.5px;color:var(--muted2);line-height:1.7;max-width:300px;font-weight:400}
+.w-cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%;max-width:420px;margin-top:6px}
+.w-card{background:var(--s2);border:1px solid var(--border2);border-radius:13px;padding:12px 14px;
+  text-align:left;cursor:pointer;transition:all 0.22s;display:flex;align-items:flex-start;gap:9px;
+  -webkit-tap-highlight-color:transparent}
+.w-card:hover,.w-card:active{border-color:rgba(99,102,241,0.4);background:rgba(99,102,241,0.07);
+  transform:translateY(-2px);box-shadow:0 6px 22px rgba(99,102,241,0.14)}
+.w-card-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.w-card-icon svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic-purple{background:rgba(167,139,250,0.12);color:var(--c2);border:1px solid rgba(167,139,250,0.2)}
+.ic-cyan{background:rgba(34,211,238,0.1);color:var(--c3);border:1px solid rgba(34,211,238,0.2)}
+.ic-pink{background:rgba(244,114,182,0.1);color:var(--c4);border:1px solid rgba(244,114,182,0.2)}
+.ic-indigo{background:rgba(99,102,241,0.12);color:#818cf8;border:1px solid rgba(99,102,241,0.2)}
+.w-card-title{font-size:12.5px;font-weight:600;color:var(--text);line-height:1.3}
+.w-card-desc{font-size:11px;color:var(--muted2);margin-top:2px;line-height:1.35}
 
-        @keyframes rgb-anim {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+/* MSG ROW */
+.msg-row{display:flex;gap:10px;animation:mIn 0.32s cubic-bezier(0.34,1.4,0.64,1);
+  max-width:680px;width:100%;margin:0 auto}
+@keyframes mIn{from{opacity:0;transform:translateY(16px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.msg-row.user{flex-direction:row-reverse}
+.av{width:34px;height:34px;border-radius:10px;flex-shrink:0;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin-top:2px}
+.av-ai{background:var(--s2);border:1px solid var(--border2)}
+.av-ai img{width:100%;height:100%;object-fit:cover}
+.av-user{background:linear-gradient(135deg,var(--c1),#818cf8);color:#fff;box-shadow:0 4px 12px rgba(99,102,241,0.35)}
+.bwrap{display:flex;flex-direction:column;gap:4px;max-width:calc(100% - 46px)}
+.msg-row.user .bwrap{align-items:flex-end}
+.msg-row.ai  .bwrap{align-items:flex-start}
+.bubble{padding:12px 15px;border-radius:14px;font-size:14px;line-height:1.72;
+  position:relative;word-break:break-word;max-width:100%}
+.bubble.ai{background:var(--s2);border:1px solid var(--border2);border-top-left-radius:4px;
+  color:var(--text);box-shadow:0 2px 18px rgba(0,0,0,0.3),0 0 0 1px rgba(99,102,241,0.04)}
+.bubble.user{background:linear-gradient(135deg,#5557f0,#7c7ff8);border-top-right-radius:4px;
+  color:#fff;box-shadow:0 4px 22px rgba(99,102,241,0.38),inset 0 1px 0 rgba(255,255,255,0.15)}
+.bubble img.att{max-width:100%;max-height:220px;border-radius:9px;margin-top:8px;display:block;object-fit:cover;border:1px solid var(--border2)}
+.bubble code{font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;font-size:12.5px;color:#93c5fd}
+.bubble pre{background:rgba(0,0,0,0.4);border:1px solid var(--border2);border-radius:9px;padding:12px;margin:8px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:#e2e8f0}
+.bubble pre code{background:none;padding:0;color:inherit}
+.bubble strong{font-weight:700;color:#fff}
+.bubble em{font-style:italic;color:var(--c2)}
 
-        /* Neon Glow Utility */
-        .glow-blue { text-shadow: 0 0 15px var(--neon-blue); }
-        .glow-text-gradient {
-            background: linear-gradient(to right, #00f3ff, #bc13fe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(188, 19, 254, 0.5);
-        }
-        
-        .btn-neon {
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+/* AI bubble rich formatting */
+.bubble.ai h1,.bubble.ai h2,.bubble.ai h3{
+  font-weight:700;color:#fff;margin:14px 0 6px;line-height:1.3}
+.bubble.ai h1{font-size:16px;background:linear-gradient(90deg,#fff,var(--c2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bubble.ai h2{font-size:15px;color:var(--c2)}
+.bubble.ai h3{font-size:14px;color:var(--c3)}
+.bubble.ai h1:first-child,.bubble.ai h2:first-child,.bubble.ai h3:first-child{margin-top:0}
 
-        .btn-neon::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: 0.5s;
-        }
+.bubble.ai p{margin:0 0 10px;line-height:1.75}
+.bubble.ai p:last-child{margin-bottom:0}
 
-        .btn-neon:hover::after {
-            left: 100%;
-        }
+.bubble.ai ul,.bubble.ai ol{
+  margin:6px 0 10px;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.bubble.ai ul li,.bubble.ai ol li{
+  display:flex;gap:8px;align-items:flex-start;line-height:1.65;font-size:13.5px}
+.bubble.ai ul li::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:linear-gradient(135deg,var(--c1),var(--c3));
+  flex-shrink:0;margin-top:6px}
+.bubble.ai ol{counter-reset:oli}
+.bubble.ai ol li{counter-increment:oli}
+.bubble.ai ol li::before{
+  content:counter(oli);
+  min-width:20px;height:20px;border-radius:50%;
+  background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.3);
+  color:var(--c2);font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 10px; }
+.bubble.ai hr{
+  border:none;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border2),transparent);
+  margin:12px 0}
 
-        /* Toast Styling */
-        #toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-            transform: translateY(200%);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+.bubble.ai blockquote{
+  border-left:3px solid var(--c1);padding:6px 12px;
+  background:rgba(99,102,241,0.07);border-radius:0 8px 8px 0;
+  margin:8px 0;color:var(--muted2);font-style:italic}
 
-        .scan-line {
-            position: absolute;
-            width: 100%;
-            height: 3px;
-            background: var(--neon-blue);
-            box-shadow: 0 0 20px 2px var(--neon-blue);
-            top: 0;
-            left: 0;
-            animation: scan 1.5s linear infinite;
-            display: none;
-            z-index: 10;
-        }
+.btime{font-size:10px;color:var(--muted);padding:0 3px}
 
-        @keyframes scan {
-            0% { top: 0%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
+/* TYPING */
+.typing-bubble{display:flex;gap:6px;align-items:center;padding:14px 18px}
+.tdot{width:7px;height:7px;border-radius:50%;background:var(--c1);animation:tb 1.3s ease-in-out infinite}
+.tdot:nth-child(2){background:var(--c2);animation-delay:0.18s}
+.tdot:nth-child(3){background:var(--c3);animation-delay:0.36s}
+@keyframes tb{0%,80%,100%{transform:translateY(0);opacity:0.3}40%{transform:translateY(-8px);opacity:1}}
 
-        /* App Icons Style */
-        .app-icon {
-            width: 55px; height: 55px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 14px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .app-icon svg { width: 28px; height: 28px; }
-        
-        /* Specific Brand Colors */
-        .icon-tiktok { background: #000000; border: 1px solid rgba(255,255,255,0.2); color: white; box-shadow: 0 5px 15px rgba(0,243,255,0.2); }
-        .icon-tiktok:hover { box-shadow: 0 0 20px rgba(0,243,255,0.6), 0 0 20px rgba(255,0,80,0.6); transform: translateY(-3px); }
-        
-        .icon-youtube { background: #ff0000; color: white; box-shadow: 0 5px 15px rgba(255,0,0,0.3); }
-        .icon-youtube:hover { box-shadow: 0 0 20px rgba(255,0,0,0.6); transform: translateY(-3px); }
-        
-        .icon-whatsapp { background: #25D366; color: white; box-shadow: 0 5px 15px rgba(37,211,102,0.3); }
-        .icon-whatsapp:hover { box-shadow: 0 0 20px rgba(37,211,102,0.6); transform: translateY(-3px); }
-    </style>
+/* BOTTOM DOCK — sticks to bottom, never overlaps messages */
+.bottom-dock{
+  flex-shrink:0;position:relative;z-index:200;
+  background:rgba(7,11,24,0.93);
+  backdrop-filter:blur(32px) saturate(160%);-webkit-backdrop-filter:blur(32px) saturate(160%);
+  border-top:1px solid var(--border);
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+.bottom-dock::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(99,102,241,0.55),rgba(34,211,238,0.45),transparent);z-index:1}
+
+/* IMAGE PREVIEW */
+#preview-bar{display:none;align-items:center;gap:10px;padding:10px 16px 0;animation:sUp 0.22s ease}
+#preview-bar.show{display:flex}
+@keyframes sUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+#preview-thumb{width:46px;height:46px;border-radius:9px;object-fit:cover;
+  border:2px solid var(--c1);box-shadow:0 0 12px rgba(99,102,241,0.4);flex-shrink:0}
+.preview-info{flex:1;min-width:0}
+.p-name{font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-sub{font-size:10.5px;color:var(--muted2);margin-top:1px}
+.btn-rm{width:28px;height:28px;border-radius:50%;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);
+  color:#f87171;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
+.btn-rm:hover{background:rgba(239,68,68,0.22);transform:scale(1.1)}
+.btn-rm:active{transform:scale(0.9)}
+.btn-rm svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round}
+
+/* INPUT */
+.input-area{padding:10px 14px 12px;position:relative}
+.input-wrap{display:flex;align-items:flex-end;gap:9px;background:var(--s2);
+  border:1.5px solid var(--border2);border-radius:20px;padding:9px 10px 9px 16px;
+  transition:border-color 0.25s,box-shadow 0.25s;max-width:700px;margin:0 auto}
+.input-wrap:focus-within{border-color:rgba(99,102,241,0.45);box-shadow:0 0 0 3px rgba(99,102,241,0.07),0 6px 28px rgba(0,0,0,0.3)}
+#txt{flex:1;background:transparent;border:none;outline:none;color:var(--text);
+  font-family:'Outfit',sans-serif;font-size:14.5px;resize:none;max-height:120px;
+  line-height:1.6;padding:2px 0;scrollbar-width:none;align-self:center}
+#txt::-webkit-scrollbar{display:none}
+#txt::placeholder{color:var(--muted)}
+.btns{display:flex;gap:7px;align-items:center;flex-shrink:0}
+.ib{width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all 0.22s;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent}
+.ib svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ib-attach{background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.2);color:var(--c2)}
+.ib-attach:hover,.ib-attach.active{background:rgba(167,139,250,0.22)}
+.ib-attach:active{transform:scale(0.9)}
+.ib-send{background:linear-gradient(135deg,var(--c1),#818cf8);color:#fff;box-shadow:0 4px 16px rgba(99,102,241,0.45)}
+.ib-send:hover:not(:disabled){transform:scale(1.08);box-shadow:0 6px 22px rgba(99,102,241,0.6)}
+.ib-send:active:not(:disabled){transform:scale(0.92)}
+.ib-send:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none}
+.ib-send svg{stroke:#fff}
+
+/* ATTACHMENT MENU — position:fixed, placed by JS so never clipped */
+.up-menu{
+  position:fixed;
+  background:var(--s2);border:1px solid var(--border2);border-radius:16px;padding:6px;
+  min-width:200px;
+  box-shadow:0 -4px 40px rgba(0,0,0,0.65),0 0 0 1px rgba(255,255,255,0.04),0 0 50px rgba(99,102,241,0.1);
+  animation:mPop 0.2s cubic-bezier(0.34,1.4,0.64,1);z-index:9999;display:none}
+.up-menu.open{display:block}
+@keyframes mPop{from{opacity:0;transform:translateY(10px) scale(0.93)}to{opacity:1;transform:translateY(0) scale(1)}}
+.up-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;
+  transition:background 0.14s;font-size:13.5px;font-weight:500;color:var(--muted2);
+  -webkit-tap-highlight-color:transparent}
+.up-item:hover,.up-item:active{background:rgba(255,255,255,0.07);color:var(--text)}
+.up-item-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.up-item-icon svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.up-item-text .up-title{font-size:13px;font-weight:600;color:var(--text)}
+.up-item-text .up-desc{font-size:10.5px;color:var(--muted2);margin-top:1px}
+.up-divider{height:1px;background:var(--border);margin:4px 0}
+
+/* RESPONSIVE */
+@media(max-width:400px){
+  .model-label{display:none}
+  .free-badge{display:none}
+  header{padding:0 12px;gap:8px}
+  .w-title{font-size:24px}
+}
+@media(max-width:340px){.w-cards{grid-template-columns:1fr}}
+
+/* ── SETUP SCREEN ── */
+#setup-screen{
+  position:fixed;inset:0;z-index:999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px;gap:0;
+  animation:wIn 0.5s cubic-bezier(0.34,1.2,0.64,1)
+}
+.setup-card{
+  width:100%;max-width:400px;
+  background:var(--s2);border:1px solid var(--border2);border-radius:22px;
+  padding:30px 24px 28px;display:flex;flex-direction:column;align-items:center;gap:20px;
+  box-shadow:0 24px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(99,102,241,0.08);
+}
+.setup-logo{width:72px;height:72px;border-radius:20px;overflow:hidden;
+  border:2px solid transparent;
+  background:linear-gradient(var(--s1),var(--s1)) padding-box,linear-gradient(135deg,var(--c1),var(--c3)) border-box;
+  box-shadow:0 0 40px rgba(99,102,241,0.3)}
+.setup-logo img{width:100%;height:100%;object-fit:cover;display:block}
+.setup-title{font-size:22px;font-weight:900;letter-spacing:-0.4px;text-align:center;
+  background:linear-gradient(135deg,#fff 0%,var(--c2) 50%,var(--c3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.setup-sub{font-size:13px;color:var(--muted2);text-align:center;line-height:1.65;max-width:300px}
+.setup-label{font-size:12px;font-weight:600;color:var(--c2);letter-spacing:0.3px;align-self:flex-start}
+.setup-input-wrap{position:relative;width:100%}
+.setup-input-wrap input{
+  width:100%;background:var(--s1);border:1.5px solid var(--border2);border-radius:12px;
+  padding:13px 44px 13px 14px;font-size:14px;font-family:'Outfit',sans-serif;
+  color:var(--text);outline:none;transition:border-color 0.2s;letter-spacing:0.5px}
+.setup-input-wrap input:focus{border-color:var(--c1);box-shadow:0 0 0 3px rgba(99,102,241,0.12)}
+.setup-input-wrap input::placeholder{color:var(--muted);letter-spacing:0}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--muted2);padding:4px;
+  display:flex;align-items:center;justify-content:center;transition:color 0.2s}
+.eye-btn:hover{color:var(--c2)}
+.eye-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.key-error{font-size:12px;color:#f87171;display:none;align-self:flex-start;margin-top:-10px}
+.setup-btn{
+  width:100%;padding:14px;border-radius:13px;border:none;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.2px;
+  background:linear-gradient(135deg,var(--c1),var(--c3));color:#fff;
+  box-shadow:0 4px 20px rgba(99,102,241,0.35);transition:all 0.2s;-webkit-tap-highlight-color:transparent}
+.setup-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(99,102,241,0.45)}
+.setup-btn:active{transform:scale(0.97)}
+.setup-hint{font-size:11.5px;color:var(--muted2);text-align:center;line-height:1.6}
+.setup-hint a{color:var(--c3);text-decoration:none;font-weight:600}
+.setup-hint a:hover{text-decoration:underline}
+#main-app{display:none;flex-direction:column;height:100%;height:100dvh;overflow:hidden;width:100%}
+</style>
 </head>
-<body class="flex flex-col items-center justify-center p-4">
+<body>
+<canvas id="bg-canvas"></canvas>
 
-    <audio id="bgMusic" loop>
-        <source src="https://files.catbox.moe/oxx4j1.mp3" type="audio/mpeg">
-    </audio>
-
-    <div class="bg-animate"></div>
-    <canvas id="canvas-particles"></canvas>
-
-    <div id="toast" class="glass-card px-6 py-3 flex items-center gap-3 border-l-4 border-l-cyan-400">
-        <i data-lucide="check-circle" class="text-cyan-400 w-5 h-5"></i>
-        <span id="toast-msg" class="text-sm font-medium">Berhasil terhubung!</span>
+<!-- SETUP SCREEN -->
+<div id="setup-screen">
+  <div class="setup-card">
+    <div class="setup-logo">
+      <img src="https://files.catbox.moe/cw5rpz.jpg" alt="Dapz AI" onerror="this.parentElement.style.background='linear-gradient(135deg,#6366f1,#22d3ee)';this.style.display='none'">
     </div>
+    <div class="setup-title">Selamat datang di Dapz AI</div>
+    <div class="setup-sub">Masukkan Groq API Key kamu untuk mulai chat. Key disimpan hanya di perangkat ini.</div>
+    <div class="setup-label">Groq API Key</div>
+    <div class="setup-input-wrap">
+      <input id="key-input" type="password" placeholder="gsk_xxxxxxxxxxxxxxxxxxxx" onkeydown="onKeyInput(event)" autocomplete="off" spellcheck="false">
+      <button class="eye-btn" onclick="toggleKeyVis()" title="Tampilkan/sembunyikan">
+        <svg id="eye-ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+    <div class="key-error" id="key-error"></div>
+    <button class="setup-btn" onclick="saveKey()">Mulai Chat</button>
 
-    <main class="w-full max-w-md z-10 my-auto pt-8">
-        
-        <section id="home-page" class="space-y-8 block">
-            <div class="text-center space-y-1">
-                <h1 class="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-tight">
-                    <span class="block text-white glow-blue">HIMZ</span>
-                    <span class="block glow-text-gradient">GENERATE SENSI</span>
-                </h1>
-                <p class="text-[11px] tracking-[0.2em] text-gray-400 uppercase font-light mt-2">Auto Generate Sensitivitas Semua HP</p>
-            </div>
+  </div>
+</div>
 
-            <div class="rgb-border-wrapper mt-8">
-                <div class="glass-card p-6 md:p-8 space-y-8 flex flex-col items-center text-center">
-                    
-                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_30px_rgba(0,243,255,0.4)]">
-                        <i data-lucide="shield" class="w-10 h-10 text-white"></i>
-                    </div>
-                    
-                    <div class="flex justify-center gap-6 w-full">
-                        <a href="https://www.tiktok.com/@himzxitt?_r=1&_t=ZS-96LwWh6pJp7" target="_blank" onclick="showToast('Membuka TikTok Himz...')" class="flex flex-col items-center gap-2">
-                            <div class="app-icon icon-tiktok">
-                                <svg viewBox="0 0 448 512" fill="currentColor"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-gray-300">TikTok</span>
-                        </a>
+<!-- MAIN APP -->
+<div id="main-app">
+<div class="app">
 
-                        <a href="https://youtube.com/@himzxit?si=5TzIaAV_FkpTTDxP" target="_blank" onclick="showToast('Membuka YouTube Himz...')" class="flex flex-col items-center gap-2">
-                            <div class="app-icon icon-youtube">
-                                <svg viewBox="0 0 576 512" fill="currentColor"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.202z"/></svg>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-gray-300">YouTube</span>
-                        </a>
+<header>
+  <div class="logo-group">
+    <div class="logo-btn">
+      <img id="header-logo" src="https://files.catbox.moe/cw5rpz.jpg" alt="Dapz AI"
+           onerror="this.parentElement.style.background='linear-gradient(135deg,#6366f1,#22d3ee)';this.style.display='none'">
+    </div>
+    <div class="header-meta">
+      <div class="header-name">Dapz AI</div>
+      <div class="header-sub"><span class="dot-live"></span>Online &amp; Siap Membantu</div>
+    </div>
+  </div>
+  <div class="header-spacer"></div>
+  <div class="header-right">
+    <div class="model-pill">
+      <div class="model-dot"></div>
+      <span class="model-label">Llama 3.3 70B</span>
+    </div>
+    <div class="free-badge">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      Gratis
+    </div>
+    <button class="btn-clear" onclick="clearChat()" title="Hapus percakapan">
+      <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </button>
+    <button class="btn-clear" onclick="changeKey()" title="Ganti API Key" style="color:var(--muted2)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+    </button>
+  </div>
+</header>
 
-                        <a href="https://whatsapp.com/channel/0029VbCbNh95EjxqPp8XAv1w" target="_blank" onclick="showToast('Membuka WA Channel...')" class="flex flex-col items-center gap-2">
-                            <div class="app-icon icon-whatsapp">
-                                <svg viewBox="0 0 448 512" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-23.1-115-65-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-gray-300">WhatsApp</span>
-                        </a>
-                    </div>
+<div id="messages">
+  <div id="welcome">
+    <div class="wlogo-wrap">
+      <img id="welcome-logo" src="https://files.catbox.moe/cw5rpz.jpg" alt="Dapz AI"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' rx=\'26\' fill=\'%236366f1\'/><text y=\'65\' x=\'50\' text-anchor=\'middle\' font-size=\'44\' font-family=\'sans-serif\' fill=\'white\' font-weight=\'900\'>D</text></svg>'">
+    </div>
+    <div class="w-title">Halo! Saya Dapz AI</div>
+    <div class="w-sub">Asisten AI berbasis Llama 3.3 70B. Tanya apa saja atau kirim gambar!</div>
+    <div class="w-cards">
+      <div class="w-card" onclick="useCard('Apa saja yang bisa kamu lakukan?')">
+        <div class="w-card-icon ic-purple"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <div><div class="w-card-title">Kemampuan saya</div><div class="w-card-desc">Pelajari apa yang bisa saya bantu</div></div>
+      </div>
+      <div class="w-card" onclick="useCard('Jelaskan cara kerja model AI seperti kamu')">
+        <div class="w-card-icon ic-cyan"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="w-card-title">Cara kerja AI</div><div class="w-card-desc">Penjelasan mendalam tentang AI</div></div>
+      </div>
+      <div class="w-card" onclick="useCard('Bantu saya menulis konten kreatif yang menarik')">
+        <div class="w-card-icon ic-pink"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <div><div class="w-card-title">Menulis kreatif</div><div class="w-card-desc">Esai, cerita, caption</div></div>
+      </div>
+      <div class="w-card" onclick="useCard('Analisis gambar yang akan saya kirim')">
+        <div class="w-card-icon ic-indigo"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div><div class="w-card-title">Analisis gambar</div><div class="w-card-desc">Kirim foto untuk dianalisis</div></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-                    <button id="btn-enter" class="btn-neon w-full py-4 bg-gradient-to-r from-cyan-600 to-blue-700 rounded-xl font-orbitron font-bold text-lg tracking-[0.2em] shadow-[0_0_20px_rgba(0,243,255,0.4)] hover:brightness-125 uppercase active:scale-95 transition-all mt-4">
-                        MASUK
-                    </button>
-                </div>
-            </div>
-        </section>
+<!-- BOTTOM DOCK: PREVIEW + INPUT — flex child, never overlaps -->
+<div class="bottom-dock" id="bottom-dock">
+  <div id="preview-bar">
+    <img id="preview-thumb" src="" alt="">
+    <div class="preview-info">
+      <div class="p-name" id="preview-name">gambar.jpg</div>
+      <div class="p-sub">Siap dikirim bersama pesan kamu</div>
+    </div>
+    <button class="btn-rm" onclick="removeImg()">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="input-area">
+    <div class="input-wrap">
+      <textarea id="txt" rows="1" placeholder="Ketik pesan untuk Dapz AI..." onkeydown="onKey(event)" oninput="resize(this)"></textarea>
+      <div class="btns">
+        <button class="ib ib-attach" id="attach-btn" onclick="toggleMenu()" title="Lampirkan file">
+          <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        </button>
+        <input type="file" id="file-in" style="display:none" onchange="onFile(event)">
+        <button class="ib ib-send" id="send-btn" onclick="send()">
+          <svg viewBox="0 0 24 24" style="stroke:#fff"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <section id="generator-page" class="space-y-6 hidden opacity-0 w-full">
-            <div class="flex items-center justify-between mb-2">
-                <button id="btn-back" class="p-3 hover:bg-white/10 rounded-full transition-colors backdrop-blur-md bg-white/5"><i data-lucide="chevron-left"></i></button>
-                <h2 class="text-xl font-orbitron font-bold text-cyan-400 tracking-wider">AI GENERATOR</h2>
-                <div class="w-12"></div>
-            </div>
+<!-- ATTACHMENT MENU: outside dock, position:fixed via JS -->
+<div class="up-menu" id="up-menu">
+  <div class="up-item" onclick="triggerUpload('image/*','Gambar')">
+    <div class="up-item-icon ic-cyan"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+    <div class="up-item-text"><div class="up-title">Foto / Gambar</div><div class="up-desc">JPG, PNG, GIF, WebP</div></div>
+  </div>
+  <div class="up-divider"></div>
+  <div class="up-item" onclick="triggerUpload('.pdf,.doc,.docx,.txt','Dokumen')">
+    <div class="up-item-icon ic-indigo"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+    <div class="up-item-text"><div class="up-title">Dokumen</div><div class="up-desc">PDF, DOC, TXT</div></div>
+  </div>
+  <div class="up-divider"></div>
+  <div class="up-item" onclick="triggerUpload('video/*','Video')">
+    <div class="up-item-icon ic-pink"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+    <div class="up-item-text"><div class="up-title">Video</div><div class="up-desc">MP4, MOV (pratinjau saja)</div></div>
+  </div>
+</div>
 
-            <div class="glass-card p-6 space-y-6 relative overflow-hidden border border-cyan-500/30">
-                <div id="scan-line" class="scan-line"></div>
-                
-                <div class="relative">
-                    <label class="text-[10px] uppercase text-cyan-400 font-bold mb-2 block tracking-widest">Pilih Perangkat (HP)</label>
-                    <div class="relative">
-                        <i data-lucide="smartphone" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cyan-400"></i>
-                        <input type="text" id="device-search" placeholder="Cari HP Kamu (Contoh: Infinix)" 
-                            class="w-full bg-black/60 border border-cyan-500/40 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,243,255,0.3)] transition-all font-medium text-sm">
-                    </div>
-                    
-                    <div id="suggestion-box" class="absolute z-50 w-full mt-2 bg-[#050505] border border-cyan-500/30 rounded-xl max-h-60 overflow-y-auto hidden shadow-[0_10px_40px_rgba(0,0,0,0.9)]">
-                        </div>
-                </div>
+</div><!-- .app -->
+</div><!-- #main-app -->
 
-                <div id="ai-status" class="hidden space-y-4 pt-2">
-                    <div class="flex justify-between items-end mb-1">
-                        <span id="typing-text" class="text-[10px] font-orbitron text-cyan-400 uppercase tracking-widest">Initializing AI...</span>
-                        <span id="progress-val" class="text-xs font-mono text-white">0%</span>
-                    </div>
-                    <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden border border-white/5">
-                        <div id="progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 w-0 transition-all duration-300 shadow-[0_0_10px_#00f3ff]"></div>
-                    </div>
-                </div>
+<script>
+let API_KEY='';
+const API_URL='https://api.groq.com/openai/v1/chat/completions';
+const MODEL='llama-3.3-70b-versatile';
+let LOGO_SRC='https://files.catbox.moe/cw5rpz.jpg';
 
-                <button id="btn-generate" class="btn-neon w-full py-5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl font-orbitron font-black text-xl tracking-widest shadow-[0_0_20px_rgba(188,19,254,0.4)] uppercase border-t border-white/20 active:scale-95 transition-all">
-                    GENERATE
-                </button>
-            </div>
+/* ── API KEY SETUP ── */
+function loadKey(){
+  const k=localStorage.getItem('dapz_groq_key');
+  if(k){API_KEY=k;document.getElementById('setup-screen').style.display='none';document.getElementById('main-app').style.display='flex'}
+  else{document.getElementById('setup-screen').style.display='flex';document.getElementById('main-app').style.display='none'}
+}
+function saveKey(){
+  const val=document.getElementById('key-input').value.trim();
+  const err=document.getElementById('key-error');
+  if(!val){err.textContent='API Key tidak boleh kosong.';err.style.display='block';return}
+  if(!val.startsWith('gsk_')){err.textContent='API Key Groq harus diawali dengan "gsk_".';err.style.display='block';return}
+  err.style.display='none';
+  localStorage.setItem('dapz_groq_key',val);
+  API_KEY=val;
+  document.getElementById('setup-screen').style.display='none';
+  document.getElementById('main-app').style.display='flex';
+}
+function toggleKeyVis(){
+  const inp=document.getElementById('key-input');
+  const ico=document.getElementById('eye-ico');
+  if(inp.type==='password'){inp.type='text';ico.innerHTML='<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'}
+  else{inp.type='password';ico.innerHTML='<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'}
+}
+function changeKey(){
+  localStorage.removeItem('dapz_groq_key');
+  API_KEY='';
+  document.getElementById('key-input').value='';
+  document.getElementById('key-error').style.display='none';
+  document.getElementById('setup-screen').style.display='flex';
+  document.getElementById('main-app').style.display='none';
+}
+function onKeyInput(e){if(e.key==='Enter')saveKey();}
+window.addEventListener('DOMContentLoaded',loadKey);
+const SYS=`Kamu adalah Dapz AI, asisten AI yang sangat cerdas, ramah, dan helpful.
+Jawab dalam bahasa Indonesia kecuali pengguna menggunakan bahasa lain.
+Berikan jawaban yang informatif, akurat, dan engaging.
+Jangan gunakan emoji HP/Android biasa. Gunakan bahasa yang natural dan friendly.
+Jika ada gambar, analisis dengan sangat detail.`;
 
-            <div id="result-container" class="hidden space-y-4">
-                <div class="rgb-border-wrapper">
-                    <div class="glass-card p-6">
-                        <h3 class="text-center font-orbitron text-sm mb-6 border-b border-white/10 pb-3 text-cyan-400 tracking-[0.2em]">HASIL OPTIMASI AI</h3>
-                        <div id="results-grid" class="grid grid-cols-2 gap-3">
-                            </div>
-                        <div class="mt-5 pt-4 border-t border-white/10">
-                            <div class="flex justify-between items-center bg-black/40 p-4 rounded-xl border border-cyan-500/30 shadow-[inset_0_0_15px_rgba(0,243,255,0.1)]">
-                                <span class="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">Tombol Tembak</span>
-                                <span id="fire-btn" class="font-orbitron font-black text-2xl text-white glow-blue">--</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button onclick="location.reload()" class="w-full py-4 text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-white transition-colors">Reset Generator</button>
-            </div>
-        </section>
+let history=[],imgB64=null,imgSrc=null,imgName=null,menuOpen=false;
 
-    </main>
+/* BG CANVAS */
+(function(){
+  const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
+  let W,H,pts;
+  const cols=['#6366f1','#818cf8','#22d3ee','#a78bfa','#f472b6'];
+  function init(){
+    W=c.width=window.innerWidth;H=c.height=window.innerHeight;
+    pts=Array.from({length:6},()=>({
+      x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,
+      r:140+Math.random()*200,col:cols[Math.floor(Math.random()*cols.length)]}));
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+      g.addColorStop(0,p.col+'26');g.addColorStop(1,'transparent');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<-p.r||p.x>W+p.r)p.vx*=-1;
+      if(p.y<-p.r||p.y>H+p.r)p.vy*=-1;
+    });requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',init);init();draw();
+})();
 
-    <footer class="mt-10 pb-6 opacity-30 text-[9px] font-orbitron tracking-[0.3em] z-10 uppercase text-center w-full">
-        &copy; GENERATOR SENSI HIMZ
-    </footer>
+function now(){return new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}
+function resize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
+function scrollBot(){const m=document.getElementById('messages');m.scrollTo({top:m.scrollHeight,behavior:'smooth'})}
+function useCard(t){document.getElementById('txt').value=t;document.getElementById('txt').focus();resize(document.getElementById('txt'))}
 
-    <script>
-        // Init Lucide Icons
-        lucide.createIcons();
+/* MENU — position:fixed, placed by JS above the attach button */
+function positionMenu(){
+  const btn=document.getElementById('attach-btn');
+  const menu=document.getElementById('up-menu');
+  const r=btn.getBoundingClientRect();
+  const mW=210,gap=10;
+  let left=r.left;
+  let bottom=window.innerHeight-r.top+gap;
+  if(left+mW>window.innerWidth-8)left=window.innerWidth-mW-8;
+  if(left<8)left=8;
+  menu.style.left=left+'px';
+  menu.style.bottom=bottom+'px';
+  menu.style.right='auto';
+  menu.style.top='auto';
+}
+function toggleMenu(){
+  menuOpen=!menuOpen;
+  const menu=document.getElementById('up-menu');
+  const btn=document.getElementById('attach-btn');
+  if(menuOpen){positionMenu();menu.classList.add('open');btn.classList.add('active')}
+  else{menu.classList.remove('open');btn.classList.remove('active')}
+}
+function closeMenu(){
+  if(!menuOpen)return;
+  menuOpen=false;
+  document.getElementById('up-menu').classList.remove('open');
+  document.getElementById('attach-btn').classList.remove('active');
+}
+document.addEventListener('click',e=>{
+  if(menuOpen&&!e.target.closest('#up-menu')&&!e.target.closest('#attach-btn'))closeMenu();
+});
+function triggerUpload(accept,type){
+  document.getElementById('file-in').accept=accept;
+  document.getElementById('file-in').dataset.type=type;
+  document.getElementById('file-in').click();
+  closeMenu();
+}
 
-        // Database Perangkat
-        const devices = [
-            "Infinix Hot 10", "Infinix Hot 11", "Infinix Hot 12", "Infinix Hot 20", "Infinix Hot 30", "Infinix Hot 40", 
-            "Infinix Note 10", "Infinix Note 11", "Infinix Note 12", "Infinix Note 30", "Infinix Note 40",
-            "Infinix GT 10 Pro", "Infinix GT 20 Pro", "Infinix Zero Ultra",
-            "Xiaomi Redmi Note 10", "Xiaomi Redmi Note 11", "Xiaomi Redmi Note 12", "Xiaomi Redmi Note 13", 
-            "Xiaomi Mi 11", "Xiaomi Mi 12", "Xiaomi 13 Pro", "Xiaomi 14",
-            "Redmi 9", "Redmi 10", "Redmi 12", "Redmi 13",
-            "Poco X3 Pro", "Poco X5 Pro", "Poco X6 Pro", "Poco F3", "Poco F4", "Poco F5", "Poco F6", "Poco M5",
-            "Samsung Galaxy A14", "Samsung Galaxy A34", "Samsung Galaxy A54", "Samsung Galaxy A55", 
-            "Samsung Galaxy S21", "Samsung Galaxy S22", "Samsung Galaxy S23 Ultra", "Samsung Galaxy S24 Ultra",
-            "Vivo V25", "Vivo V27", "Vivo V29", "Vivo V30", "Vivo Y35", "Vivo Y22", "Vivo Y36",
-            "Oppo Reno 8", "Oppo Reno 10", "Oppo Reno 11", "Oppo A58", "Oppo A78", "Oppo Find X6",
-            "Realme 10 Pro", "Realme 11 Pro", "Realme 12 Pro", "Realme C55", "Realme C67", "Realme GT Master Edition", "Realme GT Neo 5",
-            "Asus ROG Phone 5", "Asus ROG Phone 6", "Asus ROG Phone 7", "Asus ROG Phone 8",
-            "iPhone 11", "iPhone 12 Pro", "iPhone 13 Pro Max", "iPhone 14 Pro", "iPhone 15 Pro Max"
-        ];
+/* FILE */
+function onFile(e){
+  const f=e.target.files[0];if(!f)return;
+  imgName=f.name;
+  const r=new FileReader();
+  r.onload=ev=>{
+    imgSrc=ev.target.result;imgB64=imgSrc.split(',')[1];
+    document.getElementById('preview-thumb').src=imgSrc;
+    document.getElementById('preview-name').textContent=f.name;
+    document.getElementById('preview-bar').classList.add('show');
+  };
+  r.readAsDataURL(f);e.target.value='';
+}
+function removeImg(){imgSrc=null;imgB64=null;imgName=null;document.getElementById('preview-bar').classList.remove('show')}
 
-        // Music Control
-        const bgMusic = document.getElementById('bgMusic');
-        bgMusic.volume = 0.3;
-        document.addEventListener('click', () => { bgMusic.play().catch(() => {}); }, { once: true });
+/* FORMAT */
+function fmt(t){
+  // code blocks first (protect from other replacements)
+  const blocks=[];
+  t=t.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,lang,code)=>{
+    blocks.push(`<pre><code>${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`);
+    return `\x00BLOCK${blocks.length-1}\x00`;
+  });
 
-        // Toast Helper
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            toast.style.transform = 'translateY(0)';
-            setTimeout(() => { toast.style.transform = 'translateY(200%)'; }, 3000);
-        }
+  // inline code
+  t=t.replace(/`([^`\n]+)`/g,(_,c)=>`<code>${c}</code>`);
 
-        // Search Logic
-        const searchInput = document.getElementById('device-search');
-        const suggestionBox = document.getElementById('suggestion-box');
+  // split into lines for block-level parsing
+  const lines=t.split('\n');
+  let out=[],inUl=false,inOl=false;
 
-        searchInput.addEventListener('input', (e) => {
-            const val = e.target.value.toLowerCase();
-            if (val.length < 1) { suggestionBox.classList.add('hidden'); return; }
+  function closeList(){
+    if(inUl){out.push('</ul>');inUl=false}
+    if(inOl){out.push('</ol>');inOl=false}
+  }
 
-            const filtered = devices.filter(d => d.toLowerCase().includes(val));
-            
-            if (filtered.length > 0) {
-                suggestionBox.innerHTML = filtered.map(d => `
-                    <div class="suggestion-item px-5 py-4 hover:bg-cyan-900/40 cursor-pointer border-b border-white/5 last:border-0 text-sm font-medium transition-colors text-gray-200 hover:text-white">
-                        ${d}
-                    </div>
-                `).join('');
-                suggestionBox.classList.remove('hidden');
-                
-                document.querySelectorAll('.suggestion-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        searchInput.value = item.innerText;
-                        suggestionBox.classList.add('hidden');
-                    });
-                });
-            } else { suggestionBox.classList.add('hidden'); }
-        });
+  for(let i=0;i<lines.length;i++){
+    let l=lines[i];
 
-        // Close dropdown when clicked outside
-        document.addEventListener('click', (e) => {
-            if (!searchInput.contains(e.target) && !suggestionBox.contains(e.target)) {
-                suggestionBox.classList.add('hidden');
-            }
-        });
+    // headings
+    if(/^### /.test(l)){closeList();out.push(`<h3>${inl(l.slice(4))}</h3>`);continue}
+    if(/^## /.test(l)){closeList();out.push(`<h2>${inl(l.slice(3))}</h2>`);continue}
+    if(/^# /.test(l)){closeList();out.push(`<h1>${inl(l.slice(2))}</h1>`);continue}
 
-        // Navigation Animation
-        const btnEnter = document.getElementById('btn-enter');
-        const homePage = document.getElementById('home-page');
-        const genPage = document.getElementById('generator-page');
+    // hr
+    if(/^[-*_]{3,}$/.test(l.trim())){closeList();out.push('<hr>');continue}
 
-        btnEnter.addEventListener('click', () => {
-            showToast('Mengakses AI Server...');
-            gsap.to(homePage, { opacity: 0, y: -20, duration: 0.4, onComplete: () => {
-                homePage.classList.add('hidden');
-                genPage.classList.remove('hidden');
-                gsap.fromTo(genPage, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
-            }});
-        });
+    // blockquote
+    if(/^> /.test(l)){closeList();out.push(`<blockquote>${inl(l.slice(2))}</blockquote>`);continue}
 
-        document.getElementById('btn-back').addEventListener('click', () => {
-            gsap.to(genPage, { opacity: 0, y: 20, duration: 0.4, onComplete: () => {
-                genPage.classList.add('hidden');
-                homePage.classList.remove('hidden');
-                gsap.fromTo(homePage, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 });
-            }});
-        });
+    // unordered list
+    if(/^[*\-] /.test(l)){
+      if(inOl){out.push('</ol>');inOl=false}
+      if(!inUl){out.push('<ul>');inUl=true}
+      out.push(`<li>${inl(l.slice(2))}</li>`);continue}
 
-        // Generator Logic
-        const btnGenerate = document.getElementById('btn-generate');
-        const aiStatus = document.getElementById('ai-status');
-        const progressBar = document.getElementById('progress-bar');
-        const progressVal = document.getElementById('progress-val');
-        const typingText = document.getElementById('typing-text');
-        const scanLine = document.getElementById('scan-line');
-        const resultContainer = document.getElementById('result-container');
+    // ordered list
+    const olm=l.match(/^\d+\. (.*)/);
+    if(olm){
+      if(inUl){out.push('</ul>');inUl=false}
+      if(!inOl){out.push('<ol>');inOl=true}
+      out.push(`<li>${inl(olm[1])}</li>`);continue}
 
-        btnGenerate.addEventListener('click', () => {
-            if (!searchInput.value) { showToast('Pilih perangkat kamu dulu!'); return; }
+    // blank line = paragraph break
+    if(l.trim()===''){
+      closeList();
+      // only add <p> break if there's content coming
+      if(out.length&&!out[out.length-1].endsWith('</p>')){
+        out.push('<p class="gap"></p>');
+      }
+      continue}
 
-            btnGenerate.disabled = true;
-            btnGenerate.style.opacity = '0.4';
-            aiStatus.classList.remove('hidden');
-            scanLine.style.display = 'block';
-            
-            let progress = 0;
-            const messages = [
-                "Scanning Hardware...",
-                "Analyzing Resolution...",
-                "Bypassing Algorithm...",
-                "Syncing AI Engine...",
-                "Generating Best Setting..."
-            ];
-            
-            const interval = setInterval(() => {
-                progress += Math.floor(Math.random() * 5) + 2;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    showResults();
-                }
-                
-                progressBar.style.width = progress + '%';
-                progressVal.innerText = progress + '%';
-                
-                const msgIdx = Math.min(Math.floor(progress / 20), messages.length - 1);
-                typingText.innerText = messages[msgIdx];
-            }, 120);
-        });
+    // regular paragraph line
+    closeList();
+    out.push(`<p>${inl(l)}</p>`);
+  }
+  closeList();
 
-        function showResults() {
-            scanLine.style.display = 'none';
-            aiStatus.classList.add('hidden');
-            btnGenerate.classList.add('hidden');
-            
-            const results = {
-                "General": Math.floor(Math.random() * (200 - 180) + 180),
-                "Red Dot": Math.floor(Math.random() * (195 - 175) + 175),
-                "2x Scope": Math.floor(Math.random() * (190 - 160) + 160),
-                "4x Scope": Math.floor(Math.random() * (180 - 145) + 145),
-                "AWM Scope": Math.floor(Math.random() * (120 - 70) + 70),
-                "Free Look": Math.floor(Math.random() * (200 - 160) + 160)
-            };
-            
-            const grid = document.getElementById('results-grid');
-            grid.innerHTML = Object.entries(results).map(([key, val]) => `
-                <div class="bg-black/40 border border-white/5 rounded-xl p-3 flex flex-col items-center shadow-[inset_0_0_10px_rgba(255,255,255,0.02)]">
-                    <span class="text-[9px] uppercase text-cyan-400/80 font-bold mb-1 tracking-wider">${key}</span>
-                    <span class="text-2xl font-orbitron font-black text-white glow-blue">${val}</span>
-                </div>
-            `).join('');
+  // merge consecutive <p> into single blocks
+  let html=out.join('')
+    .replace(/<\/p><p>/g,'<br>')
+    .replace(/<p class="gap"><\/p>/g,'</p><p>')
+    .replace(/^<br>/,'')
+    .replace(/<br>$/,'');
 
-            document.getElementById('fire-btn').innerText = Math.floor(Math.random() * (65 - 45) + 45) + '%';
-            
-            resultContainer.classList.remove('hidden');
-            gsap.from(resultContainer, { y: 30, opacity: 0, duration: 0.8, ease: "back.out(1.5)" });
-            showToast('Sensitivitas Berhasil Ditemukan!');
-        }
+  // restore code blocks
+  html=html.replace(/\x00BLOCK(\d+)\x00/g,(_,i)=>blocks[+i]);
 
-        // Particle System
-        const canvas = document.getElementById('canvas-particles');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
+  return html;
+}
 
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+function inl(t){
+  return t
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/__(.+?)__/g,'<strong>$1</strong>')
+    .replace(/_(.+?)_/g,'<em>$1</em>');
+}
 
-        window.addEventListener('resize', resize);
-        resize();
+/* ADD MESSAGE */
+function addMsg(role,text,src){
+  const w=document.getElementById('welcome');if(w)w.remove();
+  const msgs=document.getElementById('messages');
+  const row=document.createElement('div');row.className=`msg-row ${role}`;
+  const av=document.createElement('div');av.className=`av av-${role}`;
+  if(role==='ai'){const i=document.createElement('img');i.src=LOGO_SRC;i.alt='D';i.onerror=()=>{av.textContent='D'};av.appendChild(i)}
+  else{const i=document.createElement('img');i.src='https://files.catbox.moe/2688aq.jpg';i.alt='U';i.style.cssText='width:100%;height:100%;object-fit:cover';i.onerror=()=>{av.textContent='U'};av.appendChild(i)}
+  const bw=document.createElement('div');bw.className='bwrap';
+  const bub=document.createElement('div');bub.className=`bubble ${role}`;
+  if(src){const i=document.createElement('img');i.src=src;i.className='att';bub.appendChild(i)}
+  if(text){const s=document.createElement('span');s.innerHTML=fmt(text);bub.appendChild(s)}
+  const bt=document.createElement('div');bt.className='btime';bt.textContent=now();
+  bw.appendChild(bub);bw.appendChild(bt);
+  row.appendChild(av);row.appendChild(bw);msgs.appendChild(row);scrollBot();
+}
+function showTyping(){
+  const msgs=document.getElementById('messages');
+  const row=document.createElement('div');row.id='typing';row.className='msg-row ai';
+  const av=document.createElement('div');av.className='av av-ai';
+  const i=document.createElement('img');i.src=LOGO_SRC;i.alt='D';i.onerror=()=>{av.textContent='D'};av.appendChild(i);
+  const bw=document.createElement('div');bw.className='bwrap';
+  const b=document.createElement('div');b.className='bubble ai typing-bubble';
+  b.innerHTML='<div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>';
+  bw.appendChild(b);row.appendChild(av);row.appendChild(bw);msgs.appendChild(row);scrollBot();
+}
+function removeTyping(){const t=document.getElementById('typing');if(t)t.remove()}
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5;
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
-                this.color = Math.random() > 0.5 ? '#00f3ff' : '#bc13fe';
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = 0.4;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+/* SEND */
+async function send(){
+  const el=document.getElementById('txt');
+  const txt=el.value.trim();
+  if(!txt&&!imgSrc)return;
+  const btn=document.getElementById('send-btn');btn.disabled=true;
+  addMsg('user',txt,imgSrc);
+  const b64=imgB64,src=imgSrc;
+  el.value='';el.style.height='auto';removeImg();
+  let content;
+  if(b64){content=[{type:'text',text:txt||'Tolong analisis gambar ini.'},{type:'image_url',image_url:{url:`data:image/jpeg;base64,${b64}`}}]}
+  else content=txt;
+  history.push({role:'user',content});
+  showTyping();
+  try{
+    const res=await fetch(API_URL,{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${API_KEY}`},
+      body:JSON.stringify({model:MODEL,messages:[{role:'system',content:SYS},...history],max_tokens:1024,temperature:0.72})});
+    const data=await res.json();removeTyping();
+    if(data.error){addMsg('ai',`Terjadi kesalahan: ${data.error.message}`)}
+    else{const reply=data.choices[0].message.content;history.push({role:'assistant',content:reply});addMsg('ai',reply)}
+  }catch(err){removeTyping();addMsg('ai','Gagal terhubung ke server. Periksa koneksi internet kamu.')}
+  btn.disabled=false;el.focus();
+}
 
-        for (let i = 0; i < 40; i++) particles.push(new Particle());
+/* CLEAR */
+function clearChat(){
+  history=[];imgSrc=null;imgB64=null;imgName=null;
+  document.getElementById('preview-bar').classList.remove('show');
+  const msgs=document.getElementById('messages');
+  msgs.innerHTML=`
+  <div id="welcome">
+    <div class="wlogo-wrap"><img id="welcome-logo" src="${LOGO_SRC}" alt="Dapz AI" onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 100 100\\'><rect width=\\'100\\' height=\\'100\\' rx=\\'26\\' fill=\\'%236366f1\\'/><text y=\\'65\\' x=\\'50\\' text-anchor=\\'middle\\' font-size=\\'44\\' font-family=\\'sans-serif\\' fill=\\'white\\' font-weight=\\'900\\'>D</text></svg>'"></div>
+    <div class="w-title">Chat baru dimulai</div>
+    <div class="w-sub">Saya siap membantu kamu lagi. Silakan mulai percakapan!</div>
+    <div class="w-cards">
+      <div class="w-card" onclick="useCard('Apa saja yang bisa kamu lakukan?')">
+        <div class="w-card-icon ic-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <div><div class="w-card-title">Kemampuan saya</div><div class="w-card-desc">Pelajari apa yang bisa saya bantu</div></div>
+      </div>
+      <div class="w-card" onclick="useCard('Bantu saya menulis konten kreatif')">
+        <div class="w-card-icon ic-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <div><div class="w-card-title">Menulis kreatif</div><div class="w-card-desc">Esai, cerita, caption</div></div>
+      </div>
+    </div>
+  </div>`;
+}
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-        animate();
-    </script>
+/* KEYBOARD HANDLER — re-scroll when Android keyboard opens/closes */
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',()=>{ scrollBot(); });
+}
+</script>
 </body>
 </html>
