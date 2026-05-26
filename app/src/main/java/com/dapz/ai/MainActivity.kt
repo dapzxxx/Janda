@@ -13,28 +13,18 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
     private lateinit var wv: WebView
     private var fileCallback: ValueCallback<Array<Uri>>? = null
     private val FILE_CHOOSER_REQUEST = 1001
-    private val PERM_REQUEST = 1002
+    
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.statusBarColor = Color.parseColor("#000000")
-        }
-        // Request runtime permissions
-        val permsToRequest = arrayOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.WRITE_EXTERNAL_STORAGE").filter {
-            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-        }.toTypedArray()
-        if (permsToRequest.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, permsToRequest, PERM_REQUEST)
         }
         wv = WebView(this)
         wv.layoutParams = FrameLayout.LayoutParams(-1, -1)

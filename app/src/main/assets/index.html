@@ -68,6 +68,18 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
 .btn-clear:hover{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#f87171}
 .btn-clear:active{transform:scale(0.92)}
 .btn-clear svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* header action buttons — Trading & Hapus, ukuran sama */
+.hdr-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;width:52px;height:44px;border-radius:12px;border:1.5px solid var(--border2);
+  background:var(--s2);color:var(--muted2);cursor:pointer;flex-shrink:0;
+  font-family:'Outfit',sans-serif;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
+.hdr-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hdr-btn span{font-size:9.5px;font-weight:700;letter-spacing:0.2px}
+.hdr-btn:active{transform:scale(0.93)}
+.btn-trade{color:var(--c3)!important;border-color:rgba(34,211,238,0.35)!important;background:rgba(34,211,238,0.06)!important}
+.btn-trade:hover{background:rgba(34,211,238,0.14)!important}
+.hdr-del{color:#f87171!important;border-color:rgba(248,113,113,0.35)!important;background:rgba(248,113,113,0.06)!important}
+.hdr-del:hover{background:rgba(248,113,113,0.14)!important}
 
 /* MESSAGES — the only scrolling area */
 #messages{
@@ -149,6 +161,25 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
 .gen-img{width:260px;height:260px;object-fit:cover;display:block}
 .gen-img-cap{display:flex;align-items:center;gap:6px;padding:8px 10px;
   background:var(--s2);font-size:11px;color:var(--muted2);line-height:1.4}
+.gen-dl-btn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border2);
+  background:rgba(99,102,241,0.12);color:var(--c2);cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:all 0.2s;
+  -webkit-tap-highlight-color:transparent}
+.gen-dl-btn:hover{background:rgba(99,102,241,0.25)}
+.gen-dl-btn:active{transform:scale(0.9)}
+.gen-dl-btn svg{width:13px;height:13px}
+/* copy signal button */
+.copy-signal-btn{
+  display:flex;align-items:center;gap:7px;
+  margin-top:8px;padding:9px 14px;border-radius:10px;
+  border:1.5px solid rgba(99,102,241,0.3);
+  background:rgba(99,102,241,0.08);color:var(--c2);
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent;
+  align-self:flex-start}
+.copy-signal-btn svg{width:14px;height:14px;flex-shrink:0}
+.copy-signal-btn:hover{background:rgba(99,102,241,0.18);border-color:rgba(99,102,241,0.5)}
+.copy-signal-btn:active{transform:scale(0.96)}
 .bubble code{font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;font-size:12.5px;color:#93c5fd}
 .bubble pre{background:rgba(0,0,0,0.4);border:1px solid var(--border2);border-radius:9px;padding:12px;margin:8px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:#e2e8f0}
 .bubble pre code{background:none;padding:0;color:inherit}
@@ -328,8 +359,38 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
 .setup-hint a{color:var(--c3);text-decoration:none;font-weight:600}
 .setup-hint a:hover{text-decoration:underline}
 #main-app{display:none;flex-direction:column;height:100%;height:100dvh;overflow:hidden;width:100%}
+.tp-sheet{width:100%;max-width:480px;background:var(--s1);border-radius:22px 22px 0 0;
+  padding:12px 20px 32px;display:flex;flex-direction:column;gap:14px;
+  border-top:1px solid var(--border2);
+  animation:slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1)}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.tp-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 4px}
+.tp-title{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,#fff,var(--c2));-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text}
+.tp-title svg{width:20px;height:20px;stroke:var(--c2);flex-shrink:0}
+.tp-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tp-group{display:flex;flex-direction:column;gap:6px}
+.tp-label{font-size:11px;font-weight:600;color:var(--c2);letter-spacing:0.3px}
+.tp-select{background:var(--s2);border:1.5px solid var(--border2);border-radius:11px;
+  padding:11px 12px;font-size:14px;font-family:'Outfit',sans-serif;color:var(--text);
+  outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;background-size:16px;
+  padding-right:32px}
+.tp-select:focus{border-color:var(--c1)}
+.tp-btn{padding:14px;border-radius:13px;border:none;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;
+  background:linear-gradient(135deg,var(--c1),var(--c3));color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 20px rgba(99,102,241,0.35);transition:all 0.2s;
+  -webkit-tap-highlight-color:transparent}
+.tp-btn svg{width:17px;height:17px}
+.tp-btn:active{transform:scale(0.97)}
+.tp-cancel{padding:12px;border-radius:13px;border:1.5px solid var(--border2);
+  background:transparent;color:var(--muted2);font-family:'Outfit',sans-serif;
+  font-size:14px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent}
 </style>
-</head>
 <body>
 <canvas id="bg-canvas"></canvas>
 
@@ -371,19 +432,13 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
   </div>
   <div class="header-spacer"></div>
   <div class="header-right">
-    <div class="model-pill">
-      <div class="model-dot"></div>
-      <span class="model-label">Llama 4 Scout</span>
-    </div>
-    <div class="free-badge">
-      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-      Gratis
-    </div>
-    <button class="btn-clear" onclick="clearChat()" title="Hapus percakapan">
-      <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    <button class="hdr-btn btn-trade" onclick="openTradingPanel()" title="Analisa Trading">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      <span>Trading</span>
     </button>
-    <button class="btn-clear" onclick="changeKey()" title="Ganti API Key" style="color:var(--muted2)">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+    <button class="hdr-btn hdr-del" onclick="clearChat()" title="Hapus Percakapan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      <span>Hapus</span>
     </button>
   </div>
 </header>
@@ -453,6 +508,65 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
   </div>
 </div>
 
+<!-- TRADING PANEL -->
+<div id="trading-panel" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);align-items:flex-end;justify-content:center">
+  <div class="tp-sheet">
+    <div class="tp-handle"></div>
+    <div class="tp-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      Analisa Trading
+    </div>
+    <div class="tp-row">
+      <div class="tp-group">
+        <div class="tp-label">Pair</div>
+        <select id="tp-pair" class="tp-select">
+          <optgroup label="Forex Major">
+            <option value="EUR/USD">EUR/USD</option>
+            <option value="GBP/USD">GBP/USD</option>
+            <option value="USD/JPY">USD/JPY</option>
+            <option value="USD/CHF">USD/CHF</option>
+            <option value="AUD/USD">AUD/USD</option>
+            <option value="USD/CAD">USD/CAD</option>
+            <option value="NZD/USD">NZD/USD</option>
+          </optgroup>
+          <optgroup label="Komoditas">
+            <option value="XAU/USD">XAU/USD (Emas)</option>
+            <option value="XAG/USD">XAG/USD (Perak)</option>
+            <option value="WTI/USD">WTI/USD (Minyak)</option>
+          </optgroup>
+          <optgroup label="Forex Minor">
+            <option value="EUR/GBP">EUR/GBP</option>
+            <option value="EUR/JPY">EUR/JPY</option>
+            <option value="GBP/JPY">GBP/JPY</option>
+          </optgroup>
+          <optgroup label="Crypto">
+            <option value="BTC/USD">BTC/USD</option>
+            <option value="ETH/USD">ETH/USD</option>
+            <option value="BNB/USD">BNB/USD</option>
+            <option value="XRP/USD">XRP/USD</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="tp-group">
+        <div class="tp-label">Timeframe</div>
+        <select id="tp-tf" class="tp-select">
+          <option value="5min">5 Menit</option>
+          <option value="15min" selected>15 Menit</option>
+          <option value="30min">30 Menit</option>
+          <option value="1h">1 Jam</option>
+          <option value="4h">4 Jam</option>
+          <option value="1day">1 Hari</option>
+        </select>
+      </div>
+    </div>
+    <button class="tp-btn" onclick="runAnalysis()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Analisa Sekarang
+    </button>
+    <button class="tp-cancel" onclick="closeTradingPanel()">Batal</button>
+  </div>
+</div>
+
 </div><!-- .app -->
 </div><!-- #main-app -->
 
@@ -495,24 +609,33 @@ function changeKey(){
 }
 function onKeyInput(e){if(e.key==='Enter')saveKey();}
 window.addEventListener('DOMContentLoaded',loadKey);
-const SYS=`Kamu adalah Dapz AI, asisten AI yang sangat cerdas, ramah, dan helpful.
-Jawab dalam bahasa Indonesia kecuali pengguna menggunakan bahasa lain.
-Berikan jawaban yang informatif, akurat, dan engaging.
-Jangan gunakan emoji HP/Android biasa. Gunakan bahasa yang natural dan friendly.
-Jika ada gambar yang dikirim user, analisis dengan sangat detail.
+const SYS=`Kamu adalah Dapz AI — asisten AI cerdas, to the point, dan selalu menjawab dengan tepat.
 
-PENTING - Generate Gambar:
-Jika user meminta membuat/generate/buat gambar, ilustrasi, foto, atau gambar apapun, kamu HARUS balas HANYA dengan format berikut (tidak ada teks lain):
-[GENERATE_IMAGE: deskripsi prompt dalam bahasa Inggris yang detail dan deskriptif]
+ATURAN WAJIB:
+1. SELALU gunakan Bahasa Indonesia yang baik dan natural. JANGAN campur dengan bahasa Inggris kecuali istilah teknis yang memang tidak ada padanannya.
+2. Jawab LANGSUNG sesuai pertanyaan. JANGAN bertele-tele, JANGAN basa-basi berlebihan, JANGAN ulang pertanyaan user.
+3. Jawaban harus AKURAT dan RELEVAN. Jika tidak tahu, katakan tidak tahu — jangan mengarang.
+4. Panjang jawaban sesuai kebutuhan: pertanyaan singkat → jawab singkat. Pertanyaan kompleks → jawab lengkap tapi tetap padat.
+5. JANGAN gunakan kalimat pembuka seperti "Tentu!", "Baik!", "Halo!", "Senang sekali bisa membantu!" — langsung jawab.
+6. Jika ada gambar dari user, analisis gambar tersebut secara detail dan akurat.
 
+FORMAT:
+- Gunakan poin/list hanya jika memang perlu (lebih dari 3 item)
+- Gunakan **bold** hanya untuk hal yang benar-benar penting
+- JANGAN gunakan terlalu banyak formatting yang tidak perlu
+
+GENERATE GAMBAR:
+Jika user meminta membuat/generate/buat/gambarkan gambar apapun, balas HANYA dengan:
+[GENERATE_IMAGE: deskripsi prompt dalam bahasa Inggris yang detail]
 Contoh:
 User: "buatkan gambar kucing astronot"
-Kamu: [GENERATE_IMAGE: a cute cat wearing an astronaut suit floating in space, stars and earth in background, highly detailed, digital art, 4k]
-
-User: "gambar pemandangan gunung saat sunset"
-Kamu: [GENERATE_IMAGE: beautiful mountain landscape at sunset, orange and purple sky, realistic photography, highly detailed, 4k]`;
+Kamu: [GENERATE_IMAGE: cute cat wearing astronaut suit floating in space, earth visible in background, highly detailed digital art, 4k quality]`;
 
 let history=[],imgB64=null,imgSrc=null,imgName=null,menuOpen=false;
+const TD_KEY='9a90124ff3574dcfba0fb2d29e8836aa';
+const TD_URL='https://api.twelvedata.com';
+const GOLD_KEY='goldapi-c64f8727ba12d139a72136ca2a2a5467-io';
+const GOLD_URL='https://www.goldapi.io/api';
 
 /* BG CANVAS */
 (function(){
@@ -782,7 +905,7 @@ async function send(){
   try{
     const res=await fetch(API_URL,{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${API_KEY}`},
-      body:JSON.stringify({model:MODEL,messages:msgsToSend,max_tokens:1024,temperature:0.72})});
+      body:JSON.stringify({model:MODEL,messages:msgsToSend,max_tokens:2048,temperature:0.4})});
     const data=await res.json();removeTyping();
     if(data.error){addMsg('ai',`Terjadi kesalahan: ${data.error.message}`)}
     else{
@@ -838,19 +961,392 @@ function addGeneratedImage(url,prompt){
   const i=document.createElement('img');i.src=LOGO_SRC;i.alt='D';i.onerror=()=>{av.textContent='D'};av.appendChild(i);
   const bw=document.createElement('div');bw.className='bwrap';
 
-  // container gambar
   const wrap=document.createElement('div');wrap.className='gen-img-wrap';
-  const im=document.createElement('img');im.src=url;im.className='gen-img';im.onclick=()=>openImgViewer(url);
-  const cap=document.createElement('div');cap.className='gen-img-cap';
-  cap.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>${prompt.length>60?prompt.slice(0,60)+'...':prompt}</span>`;
-  wrap.appendChild(im);wrap.appendChild(cap);
 
+  const im=document.createElement('img');im.src=url;im.className='gen-img';im.onclick=()=>openImgViewer(url);
+
+  const cap=document.createElement('div');cap.className='gen-img-cap';
+  cap.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span style="flex:1">${prompt.length>50?prompt.slice(0,50)+'...':prompt}</span>`;
+
+  // tombol download
+  const dlBtn=document.createElement('button');
+  dlBtn.className='gen-dl-btn';
+  dlBtn.title='Download gambar';
+  dlBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+  dlBtn.onclick=()=>downloadImage(url,prompt);
+  cap.appendChild(dlBtn);
+
+  wrap.appendChild(im);wrap.appendChild(cap);
   const bt=document.createElement('div');bt.className='btime';bt.textContent=now();
   bw.appendChild(wrap);bw.appendChild(bt);
   row.appendChild(av);row.appendChild(bw);msgs.appendChild(row);scrollBot();
 }
 
-/* CLEAR */
+/* DOWNLOAD IMAGE — pakai blob supaya work di WebView/APK */
+async function downloadImage(url,prompt){
+  try{
+    const res=await fetch(url);
+    const blob=await res.blob();
+    const blobUrl=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const filename='dapz-ai-'+prompt.slice(0,30).replace(/[^a-z0-9]/gi,'-').toLowerCase()+'.jpg';
+    a.href=blobUrl;a.download=filename;
+    document.body.appendChild(a);a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(blobUrl),3000);
+  }catch(e){
+    // fallback: buka gambar di tab baru, user bisa long-press save
+    window.open(url,'_blank');
+  }
+}
+
+/* ── TRADING ANALYSIS ── */
+function openTradingPanel(){
+  const p=document.getElementById('trading-panel');
+  p.style.display='flex';
+}
+function closeTradingPanel(){
+  document.getElementById('trading-panel').style.display='none';
+}
+
+async function runAnalysis(){
+  const pair=document.getElementById('tp-pair').value;
+  const tf=document.getElementById('tp-tf').value;
+  closeTradingPanel();
+  addMsg('user',`Analisa trading ${pair} timeframe ${tf}`);
+  history.push({role:'user',content:`Analisa trading ${pair} timeframe ${tf}`});
+  showTyping();
+  const metalPairs=['XAU/USD','XAG/USD','XPT/USD','XPD/USD'];
+  if(metalPairs.includes(pair)){await runGoldAnalysis(pair,tf);return;}
+  try{
+    const symbol=pair;
+    const [candleRes,rsiRes,macdRes,emaRes]=await Promise.all([
+      fetch(`${TD_URL}/time_series?symbol=${encodeURIComponent(symbol)}&interval=${tf}&outputsize=50&apikey=${TD_KEY}`),
+      fetch(`${TD_URL}/rsi?symbol=${encodeURIComponent(symbol)}&interval=${tf}&time_period=14&outputsize=1&apikey=${TD_KEY}`),
+      fetch(`${TD_URL}/macd?symbol=${encodeURIComponent(symbol)}&interval=${tf}&outputsize=1&apikey=${TD_KEY}`),
+      fetch(`${TD_URL}/ema?symbol=${encodeURIComponent(symbol)}&interval=${tf}&time_period=50&outputsize=1&apikey=${TD_KEY}`)
+    ]);
+    const [candleData,rsiData,macdData,emaData]=await Promise.all([candleRes.json(),rsiRes.json(),macdRes.json(),emaRes.json()]);
+    if(candleData.status==='error'){removeTyping();addMsg('ai',`Gagal ambil data: ${candleData.message}`);return;}
+    const candles=candleData.values.slice(0,20);
+    const latest=candles[0];
+    const rsi=rsiData.values?.[0]?.rsi||'N/A';
+    const macd=macdData.values?.[0];
+    const ema50=emaData.values?.[0]?.ema||'N/A';
+    const highs=candles.map(c=>parseFloat(c.high));
+    const lows=candles.map(c=>parseFloat(c.low));
+    const resistance=Math.max(...highs).toFixed(5);
+    const support=Math.min(...lows).toFixed(5);
+    const closes=candles.map(c=>parseFloat(c.close)).reverse();
+    const ema9=calcEMA(closes,9).toFixed(5);
+    const ema21=calcEMA(closes,21).toFixed(5);
+    const marketData=`Pair: ${pair} | Timeframe: ${tf}\nHarga: ${latest.close} | Open: ${latest.open} | High: ${latest.high} | Low: ${latest.low}\nRSI(14): ${parseFloat(rsi).toFixed(2)}\nMACD: ${macd?`Line: ${parseFloat(macd.macd).toFixed(5)}, Signal: ${parseFloat(macd.macd_signal).toFixed(5)}, Hist: ${parseFloat(macd.macd_hist).toFixed(5)}`:'N/A'}\nEMA9: ${ema9} | EMA21: ${ema21} | EMA50: ${parseFloat(ema50).toFixed(5)}\nResistance: ${resistance} | Support: ${support}`;
+    await sendToAIForAnalysis(pair,tf,marketData);
+  }catch(err){removeTyping();addMsg('ai','Gagal mengambil data pasar. Periksa koneksi internet.');}
+}
+
+async function fetchGoldAPI(metal, date){
+  // GoldAPI tidak support CORS langsung dari browser
+  // Pakai thingproxy yang forward headers, atau kirim token lewat URL
+  const base = date
+    ? `${GOLD_URL}/${metal}/USD/${date}`
+    : `${GOLD_URL}/${metal}/USD`;
+
+  const proxies = [
+    // Direct (kadang work di beberapa browser/WebView)
+    ()=> fetch(base, {headers:{'x-access-token':GOLD_KEY,'Content-Type':'application/json'}}),
+    // thingproxy — support custom headers
+    ()=> fetch(`https://thingproxy.freeboard.io/fetch/${base}`, {headers:{'x-access-token':GOLD_KEY}}),
+    // htmldriven cors proxy
+    ()=> fetch(`https://cors.bridged.cc/${base}`, {headers:{'x-access-token':GOLD_KEY,'x-cors-grida-api-key':'temp'}}),
+    // Kirim sebagai query string fallback (beberapa API support ini)
+    ()=> fetch(`${base}?token=${GOLD_KEY}`),
+  ];
+
+  for(const attempt of proxies){
+    try{
+      const res = await attempt();
+      if(res.ok){
+        const data = await res.json();
+        if(data && !data.error && data.price) return data;
+      }
+    }catch(e){ continue; }
+  }
+  throw new Error('Gagal');
+}
+
+async function runGoldAnalysis(pair,tf){
+  try{
+    // Yahoo Finance — no API key, no CORS issue
+    const symbol='GC%3DF'; // Gold Futures = XAU/USD proxy
+    const proxy='https://api.allorigins.win/raw?url=';
+    const yahooUrl=`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=5d`;
+    const res=await fetch(proxy+encodeURIComponent(yahooUrl));
+    if(!res.ok) throw new Error('Yahoo fetch failed');
+    const data=await res.json();
+    const result=data?.chart?.result?.[0];
+    if(!result) throw new Error('No data');
+
+    const meta=result.meta;
+    const quotes=result.indicators?.quote?.[0];
+    const timestamps=result.timestamp;
+    const len=timestamps.length;
+
+    const price=meta.regularMarketPrice?.toFixed(2);
+    const prevClose=meta.previousClose?.toFixed(2)||meta.chartPreviousClose?.toFixed(2);
+    const open=quotes.open?.[len-1]?.toFixed(2)||prevClose;
+    const high=quotes.high?.[len-1]?.toFixed(2)||price;
+    const low=quotes.low?.[len-1]?.toFixed(2)||price;
+    const prevHigh=quotes.high?.[len-2]?.toFixed(2)||high;
+    const prevLow=quotes.low?.[len-2]?.toFixed(2)||low;
+    const prevCloseYest=quotes.close?.[len-2]?.toFixed(2)||prevClose;
+
+    const change=(parseFloat(price)-parseFloat(prevClose)).toFixed(2);
+    const changePct=((parseFloat(change)/parseFloat(prevClose))*100).toFixed(2);
+
+    // Pivot Point dari data kemarin
+    const pivot=((parseFloat(prevHigh)+parseFloat(prevLow)+parseFloat(prevCloseYest))/3).toFixed(2);
+    const r1=(2*parseFloat(pivot)-parseFloat(prevLow)).toFixed(2);
+    const s1=(2*parseFloat(pivot)-parseFloat(prevHigh)).toFixed(2);
+    const r2=(parseFloat(pivot)+(parseFloat(prevHigh)-parseFloat(prevLow))).toFixed(2);
+    const s2=(parseFloat(pivot)-(parseFloat(prevHigh)-parseFloat(prevLow))).toFixed(2);
+
+    const marketData=`Pair: ${pair} | Timeframe: ${tf}
+Harga Sekarang: $${price}/troy oz
+Open: $${open} | High: $${high} | Low: $${low}
+Prev Close: $${prevClose}
+Perubahan: $${change} (${changePct}%)
+Data Kemarin: High: $${prevHigh} | Low: $${prevLow} | Close: $${prevCloseYest}
+Pivot: $${pivot} | R1: $${r1} | R2: $${r2} | S1: $${s1} | S2: $${s2}`;
+
+    await sendToAIForAnalysis(pair,tf,marketData);
+  }catch(err){
+    removeTyping();
+    addMsg('ai','Gagal mengambil data emas. Periksa koneksi internet.');
+    console.error(err);
+  }
+}
+function getYesterdayDate(){
+  const d=new Date();d.setDate(d.getDate()-1);
+  return d.toISOString().slice(0,10).replace(/-/g,'');
+}
+
+async function sendToAIForAnalysis(pair,tf,marketData){
+  // Hitung sinyal SENDIRI dari data — tidak bergantung pada AI untuk sinyal utama
+  const lines = marketData.split('\n');
+  const get = (key) => {
+    const l = lines.find(l => l.includes(key));
+    if(!l) return null;
+    const m = l.match(/\$?([\d,]+\.?\d*)/);
+    return m ? parseFloat(m[1].replace(',','')) : null;
+  };
+
+  const price  = get('Harga Sekarang') || get('Harga:') || get('Harga ');
+  const pivot  = get('Pivot');
+  const r1     = get('R1');
+  const r2     = get('R2');
+  const s1     = get('S1');
+  const s2     = get('S2');
+  const high   = get('High');
+  const low    = get('Low');
+  const change = (() => { const l=lines.find(l=>l.includes('Perubahan')); if(!l)return 0; const m=l.match(/([-\d.]+)%/); return m?parseFloat(m[1]):0; })();
+
+  // Tentukan sinyal berdasarkan posisi harga vs pivot + arah pergerakan
+  let sinyal='HOLD', trend='Sideways', kekuatan='Lemah';
+  let entry=price, tp1=r1, tp2=r2, sl=s1;
+
+  if(price && pivot && r1 && s1){
+    const abovePivot = price > pivot;
+    const bullChange = change > 0;
+    const nearR1 = r1 && (r1-price)/price < 0.003; // terlalu dekat R1
+
+    if(abovePivot && bullChange && !nearR1){
+      sinyal='BUY'; trend='Bullish';
+      tp1=r1; tp2=r2; sl=s1;
+      const gain=r1-price; const loss=price-s1;
+      kekuatan = gain/loss >= 1.5 ? 'Kuat' : gain/loss >= 1.0 ? 'Sedang' : 'Lemah';
+    } else if(!abovePivot && !bullChange){
+      sinyal='SELL'; trend='Bearish';
+      tp1=s1; tp2=s2; sl=r1;
+      const gain=price-s1; const loss=r1-price;
+      kekuatan = gain/loss >= 1.5 ? 'Kuat' : gain/loss >= 1.0 ? 'Sedang' : 'Lemah';
+    } else {
+      sinyal='HOLD'; trend='Sideways';
+    }
+  }
+
+  const rrRaw = sinyal==='BUY'
+    ? (tp1&&sl&&entry ? ((tp1-entry)/(entry-sl)).toFixed(1) : '1.0')
+    : sinyal==='SELL'
+    ? (tp1&&sl&&entry ? ((entry-tp1)/(sl-entry)).toFixed(1) : '1.0')
+    : '1.0';
+
+  const fmt = (v) => v ? '$'+parseFloat(v).toFixed(2) : 'N/A';
+  const sinyalIcon = sinyal==='BUY'?'🟢 BUY':sinyal==='SELL'?'🔴 SELL':'🟡 HOLD';
+  const trendIcon  = trend==='Bullish'?'Bullish 🚀':trend==='Bearish'?'Bearish 📉':'Sideways ↔️';
+
+  const prompt = `Kamu adalah trader profesional. Data pasar:
+
+${marketData}
+
+Sinyal sudah ditentukan sistem: ${sinyal}
+Trend: ${trend} | Kekuatan: ${kekuatan}
+Entry: ${fmt(entry)} | TP1: ${fmt(tp1)} | TP2: ${fmt(tp2)} | SL: ${fmt(sl)} | R/R: 1:${rrRaw}
+Pivot: ${fmt(pivot)} | R1: ${fmt(r1)} | R2: ${fmt(r2)} | S1: ${fmt(s1)} | S2: ${fmt(s2)}
+
+Tulis analisa PERSIS format ini, gunakan nilai di atas TANPA mengubah sinyal/entry/TP/SL:
+
+╔════════════════════════════╗
+   📊 ANALISA ${pair} • ${tf}
+╚════════════════════════════╝
+
+⚡ SINYAL: ${sinyalIcon}
+📈 TREND: ${trendIcon}
+💪 KEKUATAN: ${kekuatan}
+
+━━━━━━━━━━━━━━━━━━━━
+💰 LEVEL TRADING
+━━━━━━━━━━━━━━━━━━━━
+🎯 Entry    : ${fmt(entry)}
+✅ TP 1     : ${fmt(tp1)}
+✅ TP 2     : ${fmt(tp2)}
+🛡️ SL       : ${fmt(sl)}
+⚖️ R/R      : 1:${rrRaw}
+
+━━━━━━━━━━━━━━━━━━━━
+📐 LEVEL KUNCI
+━━━━━━━━━━━━━━━━━━━━
+🔴 R2  : ${fmt(r2)}
+🟠 R1  : ${fmt(r1)}
+⚪ PP  : ${fmt(pivot)}
+🟢 S1  : ${fmt(s1)}
+🔵 S2  : ${fmt(s2)}
+
+━━━━━━━━━━━━━━━━━━━━
+🧠 ANALISA
+━━━━━━━━━━━━━━━━━━━━
+[Tulis 2-3 kalimat alasan sinyal ${sinyal} berdasarkan posisi harga vs pivot dan level kunci di atas. JANGAN ubah nilai apapun.]
+
+⚠️ Disclaimer: Bukan saran keuangan.
+Trading mengandung risiko kerugian.
+
+🤖 Dapz AI Trading Signal`;
+
+  try{
+    const res=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${API_KEY}`},
+      body:JSON.stringify({model:MODEL,messages:[
+        {role:'system',content:'Kamu adalah trader profesional. Isi bagian ANALISA saja. Semua nilai Entry/TP/SL/R/R/Level sudah ditentukan, JANGAN diubah. Bahasa Indonesia.'},
+        {role:'user',content:prompt}
+      ],max_tokens:1500,temperature:0.1})});
+    const aiData=await res.json();removeTyping();
+    if(aiData.error){addMsg('ai',`Error: ${aiData.error.message}`)}
+    else{
+      const reply=aiData.choices[0].message.content;
+      history.push({role:'assistant',content:reply});
+      addMsgWithCopy('ai', reply);
+    }
+  }catch(err){removeTyping();addMsg('ai','Gagal menghubungi AI.');}
+}
+
+function copyToClipboard(text, btn){
+  // Method 1: navigator.clipboard (modern browser)
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>showCopied(btn)).catch(()=>fallbackCopy(text,btn));
+  } else {
+    fallbackCopy(text,btn);
+  }
+}
+
+function fallbackCopy(text, btn){
+  // Method 2: execCommand (works in WebView/Android)
+  const ta=document.createElement('textarea');
+  ta.value=text;
+  ta.style.cssText='position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus();ta.select();
+  try{
+    document.execCommand('copy');
+    showCopied(btn);
+  }catch(e){
+    btn.textContent='Gagal salin';
+  }
+  document.body.removeChild(ta);
+}
+
+function showCopied(btn){
+  const orig=btn.innerHTML;
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Tersalin!';
+  btn.style.background='rgba(34,197,94,0.15)';
+  btn.style.borderColor='rgba(34,197,94,0.4)';
+  btn.style.color='#4ade80';
+  setTimeout(()=>{
+    btn.innerHTML=orig;
+    btn.style.background='';btn.style.borderColor='';btn.style.color='';
+  },2000);
+}
+function addMsgWithCopy(role,text){
+  addMsg(role,text);
+  const msgs=document.getElementById('messages');
+  const rows=msgs.querySelectorAll(`.msg-row.${role}`);
+  const lastRow=rows[rows.length-1];
+  if(!lastRow)return;
+  const bwrap=lastRow.querySelector('.bwrap');
+  if(!bwrap)return;
+
+  // Parse nilai dari teks AI
+  const getVal=(label)=>{
+    const m=text.match(new RegExp(label+'\\s*:\\s*\\$?([\\d,\\.]+)'));
+    return m?m[1].replace(',',''):null;
+  };
+  const tp1=getVal('TP 1')||getVal('TP1');
+  const tp2=getVal('TP 2')||getVal('TP2');
+  const sl=getVal('SL');
+
+  const btnRow=document.createElement('div');
+  btnRow.style.cssText='display:flex;gap:6px;margin-top:8px;flex-wrap:wrap';
+
+  // Helper buat tombol
+  const mkBtn=(label,val,color)=>{
+    const b=document.createElement('button');
+    b.className='copy-signal-btn';
+    if(color) b.style.cssText=`border-color:${color}33;color:${color}`;
+    b.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> ${label}${val?' $'+val:''}`;
+    b.onclick=()=>copyToClipboard(val||text, b);
+    return b;
+  };
+
+  // Tombol copy individual
+  if(tp1) btnRow.appendChild(mkBtn('TP 1',tp1,'#4ade80'));
+  if(tp2) btnRow.appendChild(mkBtn('TP 2',tp2,'#22d3ee'));
+  if(sl)  btnRow.appendChild(mkBtn('SL',sl,'#f87171'));
+
+  // Tombol salin semua
+  const copyAll=mkBtn('Salin Semua',null,null);
+  copyAll.onclick=()=>copyToClipboard(text,copyAll);
+  btnRow.appendChild(copyAll);
+
+  // Tombol hapus
+  const delBtn=document.createElement('button');
+  delBtn.className='copy-signal-btn';
+  delBtn.style.cssText='border-color:rgba(239,68,68,0.3);color:#f87171';
+  delBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg> Hapus';
+  delBtn.onclick=()=>{
+    lastRow.style.transition='opacity 0.2s,transform 0.2s';
+    lastRow.style.opacity='0';lastRow.style.transform='scale(0.95)';
+    setTimeout(()=>lastRow.remove(),200);
+  };
+  btnRow.appendChild(delBtn);
+  bwrap.appendChild(btnRow);
+}
+
+function calcEMA(closes,period){
+  const k=2/(period+1);
+  let ema=closes.slice(0,period).reduce((a,b)=>a+b,0)/period;
+  for(let i=period;i<closes.length;i++) ema=closes[i]*k+ema*(1-k);
+  return ema;
+}
+
+/* ── TRADING ANALYSIS ── */
 function clearChat(){
   history=[];imgSrc=null;imgB64=null;imgName=null;
   document.getElementById('preview-bar').classList.remove('show');
@@ -868,6 +1364,10 @@ function clearChat(){
       <div class="w-card" onclick="useCard('Bantu saya menulis konten kreatif')">
         <div class="w-card-icon ic-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
         <div><div class="w-card-title">Menulis kreatif</div><div class="w-card-desc">Esai, cerita, caption</div></div>
+      </div>
+      <div class="w-card" onclick="openTradingPanel()">
+        <div class="w-card-icon ic-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <div><div class="w-card-title">Analisa Trading</div><div class="w-card-desc">Sinyal Forex & Crypto real-time</div></div>
       </div>
     </div>
   </div>`;

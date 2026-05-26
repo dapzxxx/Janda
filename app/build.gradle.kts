@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.myapp.webapp"
+    namespace = "com.dapz.ai"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.myapp.webapp"
+        applicationId = "com.dapz.ai"
         minSdk = 23
         targetSdk = 34
         versionCode = 1
