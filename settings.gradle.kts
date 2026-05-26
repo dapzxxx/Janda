@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "DAPZ AI"
+rootProject.name = "AI X TRADING"
 include(":app")
