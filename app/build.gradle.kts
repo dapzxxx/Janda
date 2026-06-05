@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.myapp.webapp"
+    namespace = "com.kipaas.angin"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.myapp.webapp"
+        applicationId = "com.kipaas.angin"
         minSdk = 23
         targetSdk = 34
         versionCode = 1
