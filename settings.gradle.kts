@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "AI X TRADING"
+rootProject.name = "Resolution"
 include(":app")
